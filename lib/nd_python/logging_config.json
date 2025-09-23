@@ -31,14 +31,6 @@
         "level": "DEBUG",
         "propagate": false
         },
-        "dcnm": {
-            "handlers": [
-            "console",
-            "file"
-            ],
-            "level": "DEBUG",
-            "propagate": false
-        },
         "root": {
             "level": "INFO",
             "handlers": [

@@ -14,7 +14,7 @@ to the controller, so does not require a configuration file.
 1.  Modify PYTHONPATH appropriately for your setup before running this script
 
 ``` bash
-export PYTHONPATH=$PYTHONPATH:$HOME/repos/nd-python/lib:$HOME/repos/ansible/collections/ansible_collections/cisco/dcnm
+export PYTHONPATH=$PYTHONPATH:$HOME/repos/nd-python/lib
 ```
 
 2. Optional, to enable logging.
@@ -44,6 +44,7 @@ import sys
 from nd_python.common.nd_python_logger import NdPythonLogger
 from nd_python.common.nd_python_sender import NdPythonSender
 from nd_python.common.response_handler import ResponseHandler
+from nd_python.common.rest_send_v2 import RestSend
 from nd_python.credentials.default_switch_delete import CredentialsDefaultSwitchDelete
 from nd_python.parsers.parser_ansible_vault import parser_ansible_vault
 from nd_python.parsers.parser_loglevel import parser_loglevel
@@ -51,7 +52,6 @@ from nd_python.parsers.parser_nd_domain import parser_nd_domain
 from nd_python.parsers.parser_nd_ip4 import parser_nd_ip4
 from nd_python.parsers.parser_nd_password import parser_nd_password
 from nd_python.parsers.parser_nd_username import parser_nd_username
-from plugins.module_utils.common.rest_send_v2 import RestSend
 
 
 def action() -> None:

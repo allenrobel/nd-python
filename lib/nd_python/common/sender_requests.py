@@ -18,6 +18,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 __author__ = "Allen Robel"
 
+# We are using isort for import sorting.
+# pylint: disable=wrong-import-order
+
 import copy
 import inspect
 import json
@@ -92,8 +95,7 @@ class Sender:
     - username
 
     ```python
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_requests import \
-        Sender
+    from nd_python.common.sender_requests import Sender
 
     sender = Sender()
     # Uncomment to override environment variables

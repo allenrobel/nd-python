@@ -67,7 +67,7 @@ class ResponseHandler:
 
     ```python
     # import and instantiate the class
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.response_handler import ResponseHandler
+    from nd_python.common.response_handler import ResponseHandler
     response_handler = ResponseHandler()
 
     try:

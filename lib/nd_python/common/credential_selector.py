@@ -54,6 +54,9 @@ the value from the script command line).
 
 """
 
+# We are using isort for import sorting.
+# pylint: disable=wrong-import-order
+
 import argparse
 import inspect
 import logging

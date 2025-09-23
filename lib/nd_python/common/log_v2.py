@@ -108,9 +108,10 @@ class Log:
     ```
 
     At this point, a base/parent logger is created for which all other
-    loggers throughout the dcnm collection will be children.
+    loggers throughout this repository will be children.
+
     This allows for a single logging config to be used for all modules in the
-    collection, and allows for the logging config to be specified in a
+    repository, and allows for the logging config to be specified in a
     single place external to the code.
 
     ### Example module code using the Log() object
