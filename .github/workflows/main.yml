@@ -56,6 +56,7 @@ jobs:
         uses: github/super-linter/slim@v7
         env:
           VALIDATE_JSON_PRETTIER: false
+          VALIDATE_MARKDOWN_PRETTIER: false
           VALIDATE_JSCPD: false
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
