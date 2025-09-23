@@ -514,17 +514,6 @@ class Results:
             msg += "instance.diff_current must be a dict. "
             msg += f"Got {value}."
             raise TypeError(msg)
-        value["sequence_number"] = self.task_sequence_number
-        self.properties["diff_current"] = value
-
-    @diff_current.setter
-    def diff_current(self, value: dict) -> None:
-        method_name = inspect.stack()[0][3]
-        if not isinstance(value, dict):
-            msg = f"{self.class_name}.{method_name}: "
-            msg += "instance.diff_current must be a dict. "
-            msg += f"Got {value}."
-            raise TypeError(msg)
         self.properties["diff_current"] = value
 
     @property
