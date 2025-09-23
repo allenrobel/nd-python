@@ -53,7 +53,7 @@ class CredentialsDefaultSwitchDelete:
 
     def commit(self) -> None:
         """
-        Create a network
+        Delete default switch credentials from the controller.
         """
         method_name = inspect.stack()[0][3]
         self._final_verification()
