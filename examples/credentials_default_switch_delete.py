@@ -59,7 +59,7 @@ def action() -> None:
     Delete the default switch credentials.
     """
     # Prepopulate error message in case of failure
-    errmsg = "Error deleting default switch credentials"
+    errmsg = "Error deleting default switch credentials. "
     try:
         instance = CredentialsDefaultSwitchDelete()
         instance.rest_send = rest_send
