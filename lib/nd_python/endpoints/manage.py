@@ -1,11 +1,11 @@
-from nd_python.validators.endpoints.manage import EpSaveDefaultSwitchCredentials
+from nd_python.validators.endpoints.manage import EpSaveDefaultSwitchCredentialsValidator
 from pydantic import ValidationError
 
 base = "/api/v1/manage"
 credentials = f"{base}/credentials"
 
 
-class DeleteDefaultSwitchCredentials:
+class EpDeleteDefaultSwitchCredentials:
     """Endpoint to delete default switch credentials"""
 
     def __init__(self):
@@ -14,7 +14,7 @@ class DeleteDefaultSwitchCredentials:
         self.description = "Delete Default Switch Credentials"
 
 
-class GetCredentialsDetails:
+class EpGetCredentialsDetails:
     """Endpoint to get credentials details"""
 
     def __init__(self):
@@ -23,7 +23,7 @@ class GetCredentialsDetails:
         self.description = "Get Credentials Details"
 
 
-class GetDefaultSwitchCredentials:
+class EpGetDefaultSwitchCredentials:
     """Endpoint to get default switch credentials"""
 
     def __init__(self):
@@ -32,7 +32,7 @@ class GetDefaultSwitchCredentials:
         self.description = "Get Default Switch Credentials"
 
 
-class SaveDefaultSwitchCredentials:
+class EpSaveDefaultSwitchCredentials:
     """
     # Summary
 
@@ -51,7 +51,7 @@ class SaveDefaultSwitchCredentials:
 
     def __init__(self):
         self._committed = False
-        self.validator = EpSaveDefaultSwitchCredentials
+        self.validator = EpSaveDefaultSwitchCredentialsValidator
         self._body = {}
         self.verb = "POST"
         self.path = f"{credentials}/defaultSwitchCredentials"
