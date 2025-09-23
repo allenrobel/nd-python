@@ -90,16 +90,16 @@ class ResponseHandler:
         -   This class is not currently used. RestSend() will leverage it later.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.class_name = self.__class__.__name__
         method_name = inspect.stack()[0][3]
         self._implements = "response_handler_v1"
 
         self.log = logging.getLogger(f"nd_python.{self.class_name}")
 
-        self._response = None
-        self._result = None
-        self._verb = None
+        self._response: dict = {}
+        self._result: dict = {}
+        self._verb: str = ""
 
         self.return_codes_success = {200, 404}
         self.valid_verbs = {"DELETE", "GET", "POST", "PUT"}
@@ -174,7 +174,7 @@ class ResponseHandler:
             result["changed"] = True
         self.result = copy.copy(result)
 
-    def commit(self):
+    def commit(self) -> None:
         """
         ### Summary
         Parse the response from the controller and set self.result
@@ -202,7 +202,7 @@ class ResponseHandler:
         self._handle_response()
 
     @property
-    def implements(self):
+    def implements(self) -> str:
         """
         ### Summary
         The interface implemented by this class.
@@ -213,7 +213,7 @@ class ResponseHandler:
         return self._implements
 
     @property
-    def response(self):
+    def response(self) -> dict:
         """
         ### Summary
         The controller response.
@@ -239,7 +239,7 @@ class ResponseHandler:
         return self._response
 
     @response.setter
-    def response(self, value):
+    def response(self, value: dict) -> None:
         method_name = inspect.stack()[0][3]
         if not isinstance(value, dict):
             msg = f"{self.class_name}.{method_name}: "
@@ -259,7 +259,7 @@ class ResponseHandler:
         self._response = value
 
     @property
-    def result(self):
+    def result(self) -> dict:
         """
         -   getter: Return result.
         -   setter: Set result.
@@ -268,7 +268,7 @@ class ResponseHandler:
         return self._result
 
     @result.setter
-    def result(self, value):
+    def result(self, value: dict) -> None:
         method_name = inspect.stack()[0][3]
         if not isinstance(value, dict):
             msg = f"{self.class_name}.{method_name}: "
@@ -278,7 +278,7 @@ class ResponseHandler:
         self._result = value
 
     @property
-    def verb(self):
+    def verb(self) -> str:
         """
         ### Summary
         The request verb.
@@ -297,7 +297,7 @@ class ResponseHandler:
         return self._verb
 
     @verb.setter
-    def verb(self, value):
+    def verb(self, value: str) -> None:
         method_name = inspect.stack()[0][3]
         if value not in self.valid_verbs:
             msg = f"{self.class_name}.{method_name}: "
