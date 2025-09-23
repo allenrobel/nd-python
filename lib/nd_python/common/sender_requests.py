@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2024 Cisco and/or its affiliates.
+# Copyright (c) 2025 Cisco and/or its affiliates.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,11 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
-__author__ = "Allen Robel"
 
 # We are using isort for import sorting.
 # pylint: disable=wrong-import-order
@@ -126,28 +121,28 @@ class Sender:
         self.TIMEOUT = 10  # seconds
 
         self._domain = environ.get("ND_DOMAIN", "local")
-        self._headers = None
+        self._headers = {}
         self._history_rc = deque(maxlen=50)
         self._history_path = deque(maxlen=50)
-        self._ip4 = environ.get("ND_IP4", None)
-        self._ip6 = environ.get("ND_IP6", None)
+        self._ip4 = environ.get("ND_IP4", "")
+        self._ip6 = environ.get("ND_IP6", "")
         self._jwttoken = None
         self._last_rc = None
         self._logged_in = False
-        self._password = environ.get("ND_PASSWORD", None)
-        self._path = None
+        self._password = environ.get("ND_PASSWORD", "")
+        self._path = ""
         self._payload = None
         self._rbac = None
         self._response = None
         self._timeout = self.TIMEOUT
         self._token = None
-        self.last_url = None
+        self.last_url = ""
         self.return_code = None
-        self.url = None
+        self.url = ""
         self._username = environ.get("ND_USERNAME", "admin")
-        self._verb = None
+        self._verb = ""
 
-    def _verify_commit_parameters(self):
+    def _verify_commit_parameters(self) -> None:
         """
         ### Summary
         Verify that required parameters are set prior to calling ``commit()``
@@ -157,20 +152,20 @@ class Sender:
         -   ``ValueError`` if ``path`` is not set
         """
         method_name = inspect.stack()[0][3]
-        if self.ip4 is None and self.ip6 is None:
+        if not self.ip4 and not self.ip6:
             msg = f"{self.class_name}.{method_name}: "
             msg += "ip4 or ip6 must be set before calling commit()."
             raise ValueError(msg)
-        if self.path is None:
+        if not self.path:
             msg = f"{self.class_name}.{method_name}: "
             msg += "path must be set before calling commit()."
             raise ValueError(msg)
-        if self.verb is None:
+        if not self.verb:
             msg = f"{self.class_name}.{method_name}: "
             msg += "verb must be set before calling commit()."
             raise ValueError(msg)
 
-    def commit(self):
+    def commit(self) -> None:
         """
         Send the REST request to the controller
 
@@ -201,7 +196,7 @@ class Sender:
             msg += "Not all mandatory parameters are set. "
             msg += f"Error detail: {error}"
             raise ValueError(msg) from error
-        self.get_url()
+        self.set_url()
         msg = f"{self.class_name}.{method_name}: "
         msg += f"caller: {caller}.  "
         msg += "Calling requests with: "
@@ -239,7 +234,7 @@ class Sender:
         self._payload = None
         self.gen_response(response)
 
-    def get_headers(self):
+    def get_headers(self) -> dict[str, str]:
         """Get the headers to include in the request.
 
         Returns:
@@ -252,15 +247,15 @@ class Sender:
         headers["Authorization"] = self.token
         return copy.copy(headers)
 
-    def get_host(self):
+    def get_host(self) -> str:
         """
         Returns the server IP address to use based on the values
-        of ip4 and ip6.
+        of ip4 and ip6.  If both are set, ip4 is used.
         """
         method_name = inspect.stack()[0][3]
-        if self.ip4 is not None:
+        if self.ip4 != "":
             return self.ip4
-        if self.ip6 is not None:
+        if self.ip6 != "":
             return self.ip6
         msg = f"{self.class_name}.{method_name}: "
         msg += "ip4 or ip6 must be set before calling "
@@ -268,14 +263,14 @@ class Sender:
         self.log.debug(msg)
         raise ValueError(msg)
 
-    def get_url(self):
-        """Get the URL to use for the request.
+    def set_url(self) -> None:
+        """Set the URL to use for the request.
 
         Raises:
             ValueError: If the path is not set.
         """
         method_name = inspect.stack()[0][3]
-        if self.path is None:
+        if not self.path:
             msg = f"{self.class_name}.{method_name}: "
             msg += "call Sender.path before calling "
             msg += f"{self.class_name}.commit()"
@@ -289,7 +284,7 @@ class Sender:
         msg += f"Set url to {self.url}"
         self.log.debug(msg)
 
-    def add_history_rc(self, x):
+    def add_history_rc(self, x) -> None:
         """Add a return code to the history.
 
         Args:
@@ -297,11 +292,11 @@ class Sender:
         """
         self._history_rc.appendleft(x)
 
-    def add_history_path(self):
+    def add_history_path(self) -> None:
         """Add a request path to the history."""
         self._history_path.appendleft(self.url)
 
-    def update_status(self):
+    def update_status(self) -> None:
         """
         Update the status of the sender.
         """
@@ -310,7 +305,7 @@ class Sender:
         self.add_history_rc(self.return_code)
         self.add_history_path()
 
-    def gen_response(self, response):
+    def gen_response(self, response) -> None:
         """
         Generate a response dictionary from the requests response object.
         """
@@ -340,7 +335,7 @@ class Sender:
         response_dict["REQUEST_PATH"] = response.url
         self.response = copy.deepcopy(response_dict)
 
-    def login(self):
+    def login(self) -> None:
         """
         Log in to the server.
         """
@@ -365,7 +360,7 @@ class Sender:
             raise ValueError(msg)
         self.logged_in = "Pending"
         self.path = "/login"
-        self.get_url()
+        self.set_url()
         payload = {}
         payload["userName"] = self.username
         payload["userPasswd"] = self.password
@@ -379,7 +374,7 @@ class Sender:
         self.update_token()
         self.logged_in = True
 
-    def update_token(self):
+    def update_token(self) -> None:
         """
         Update the authentication token.
         """
@@ -398,7 +393,7 @@ class Sender:
             self.log.debug(msg)
             raise ValueError(msg) from error
 
-    def refresh_login(self):
+    def refresh_login(self) -> None:
         """
         Refresh the login session.
         """
@@ -407,7 +402,7 @@ class Sender:
         msg += "ENTERED"
         self.log.debug(msg)
         self.path = "/refresh"
-        self.get_url()
+        self.set_url()
         payload = {}
         payload["userName"] = self.username
         payload["userPasswd"] = self.password
@@ -422,39 +417,39 @@ class Sender:
         self.update_token()
 
     @property
-    def domain(self):
+    def domain(self) -> str:
         """
         The domain to use for the request.
 
         Raises:
             ValueError: If the domain is not set.
         """
-        if self._domain is None:
+        if not self._domain:
             raise ValueError("Domain is not set.")
         return self._domain
 
     @domain.setter
-    def domain(self, value):
+    def domain(self, value: str) -> None:
         self._domain = value
 
     @property
-    def headers(self):
+    def headers(self) -> dict:
         """
         The headers to use for the request.
 
         Raises:
             ValueError: If the headers are not set.
         """
-        if self._headers is None:
+        if not self._headers:
             raise ValueError("Headers are not set.")
         return self._headers
 
     @headers.setter
-    def headers(self, value):
+    def headers(self, value: dict) -> None:
         self._headers = value
 
     @property
-    def history_pretty_print(self):
+    def history_pretty_print(self) -> None:
         """
         Get a pretty-printed string of the request history.
         """
@@ -468,21 +463,21 @@ class Sender:
             self.log.debug(msg)
 
     @property
-    def history_rc(self):
+    def history_rc(self) -> list[int]:
         """
         Get the history of return codes.
         """
         return list(self._history_rc)
 
     @property
-    def history_path(self):
+    def history_path(self) -> list[str]:
         """
         Get the history of request paths.
         """
         return list(self._history_path)
 
     @property
-    def implements(self):
+    def implements(self) -> str:
         """
         ### Summary
         The interface implemented by this class.
@@ -493,88 +488,88 @@ class Sender:
         return self._implements
 
     @property
-    def ip4(self):
+    def ip4(self) -> str:
         """
         The IPv4 address to use for the request.
 
         Raises:
             ValueError: If the IPv4 address is not set.
         """
-        if self._ip4 is None:
+        if not self._ip4:
             raise ValueError("IPv4 address is not set.")
         return self._ip4
 
     @ip4.setter
-    def ip4(self, value):
+    def ip4(self, value: str) -> None:
         self._ip4 = value
 
     @property
-    def ip6(self):
+    def ip6(self) -> str:
         """
         The IPv6 address to use for the request.
 
         Raises:
             ValueError: If the IPv6 address is not set.
         """
-        if self._ip6 is None:
+        if not self._ip6:
             raise ValueError("IPv6 address is not set.")
         return self._ip6
 
     @ip6.setter
-    def ip6(self, value):
+    def ip6(self, value: str) -> None:
         self._ip6 = value
 
     @property
-    def jwttoken(self):
+    def jwttoken(self) -> str:
         """
         The JWT token to use for the request.
         """
         return self._jwttoken
 
     @jwttoken.setter
-    def jwttoken(self, value):
+    def jwttoken(self, value: str) -> None:
         self._jwttoken = value
 
     @property
-    def last_rc(self):
+    def last_rc(self) -> int:
         """
         Get the last return code.
         """
         return self._last_rc
 
     @last_rc.setter
-    def last_rc(self, value):
+    def last_rc(self, value: int) -> None:
         self._last_rc = value
 
     @property
-    def logged_in(self):
+    def logged_in(self) -> bool:
         """
         Check if the user is logged in.
         """
         return self._logged_in
 
     @logged_in.setter
-    def logged_in(self, value):
+    def logged_in(self, value: bool) -> None:
         self._logged_in = value
 
     @property
-    def password(self):
+    def password(self) -> str:
         """
         The password to use for the request.
 
         Raises:
             ValueError: If the password is not set.
         """
-        if self._password is None:
+        if not self._password:
             raise ValueError("Password is not set.")
         return self._password
 
     @password.setter
-    def password(self, value):
+    def password(self, value: str) -> None:
         self._password = value
 
     @property
-    def path(self):
+    def path(self) -> str:
         """
         Endpoint path for the REST request.
 
@@ -587,43 +582,48 @@ class Sender:
         return self._path
 
     @path.setter
-    def path(self, value):
+    def path(self, value: str) -> None:
         self._path = value
 
     @property
-    def payload(self):
+    def payload(self) -> None | dict:
         """
+        # Summary
+
         Return the payload to send to the controller
 
         ### Raises
-        -   ``TypeError`` if value is not a ``dict``.
+
+        -   `TypeError` if value is not a `dict` or `list`.
         """
         return self._payload
 
     @payload.setter
-    def payload(self, value):
+    def payload(self, value: None | dict) -> None:
         method_name = inspect.stack()[0][3]
-        if not isinstance(value, dict) and not isinstance(value, list):
+        if not isinstance(value, dict) and value is not None:
             msg = f"{self.class_name}.{method_name}: "
-            msg += f"{method_name} must be a list or dict. "
+            msg += f"{method_name} must be a dict, or None. "
             msg += f"Got type {type(value).__name__}, "
             msg += f"value {value}."
             raise TypeError(msg)
         self._payload = value
 
     @property
-    def rbac(self):
+    def rbac(self) -> str:
         """
         Get the RBAC (Role-Based Access Control) settings.
+
+        This will be a JSON string representing the RBAC settings.
         """
         return self._rbac
 
     @rbac.setter
-    def rbac(self, value):
+    def rbac(self, value: str) -> None:
         self._rbac = value
 
     @property
-    def response(self):
+    def response(self) -> dict:
         """
         ### Summary
         The response from the controller.
@@ -637,7 +637,7 @@ class Sender:
         return copy.deepcopy(self._response)
 
     @response.setter
-    def response(self, value):
+    def response(self, value) -> None:
         method_name = inspect.stack()[0][3]
         if not isinstance(value, dict):
             msg = f"{self.class_name}.{method_name}: "
@@ -648,55 +648,55 @@ class Sender:
         self._response = value
 
     @property
-    def timeout(self):
+    def timeout(self) -> int:
         """
         Get the timeout value for the request.
         """
         return self._timeout
 
     @timeout.setter
-    def timeout(self, value):
+    def timeout(self, value: int) -> None:
         self._timeout = value
 
     @property
-    def username(self):
+    def username(self) -> str:
         """
         The username to use for the request.
 
         Raises:
             ValueError: If the username is not set.
         """
-        if self._username is None:
+        if not self._username:
             raise ValueError("Username is not set.")
         return self._username
 
     @username.setter
-    def username(self, value):
+    def username(self, value) -> None:
         self._username = value
 
     @property
-    def verb(self):
+    def verb(self) -> str:
         """
         The HTTP verb to use for the request.
 
         Raises:
             ValueError: If the verb is not set.
         """
-        if self._verb is None:
+        if not self._verb:
             raise ValueError("HTTP verb is not set.")
         return self._verb
 
     @verb.setter
-    def verb(self, value):
+    def verb(self, value) -> None:
         self._verb = value
 
     @property
-    def token(self):
+    def token(self) -> str:
         """
         The JWT token to use for the request.
         """
         return self._jwttoken
 
     @token.setter
-    def token(self, value):
+    def token(self, value: str) -> None:
         self._jwttoken = value
