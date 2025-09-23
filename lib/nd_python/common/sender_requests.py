@@ -516,7 +516,7 @@ class Sender:
         return self._ip6
 
     @ip6.setter
-    def ip6(self, value) -> None:
+    def ip6(self, value: str) -> None:
         self._ip6 = value
 
     @property
