@@ -1,5 +1,5 @@
-from plugins.module_utils.common.rest_send_v2 import RestSend
-from plugins.module_utils.common.results import Results
+from nd_python.common.rest_send_v2 import RestSend
+from nd_python.common.results import Results
 
 
 class Properties:

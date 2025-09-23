@@ -7,13 +7,7 @@ If you are more interested in Nexus Dashboard 3.x REST API, see the following re
 
 [ndfc-python](https://github.com/allenrobel/ndfc-python)
 
-A basic quick start guide to this repository follows, intended for those who
-have not yet installed the Cisco DCNM Ansible collection.
-
-The nd-python repository shares a small amount of Python code with the DCNM Ansible
-Collection, so is somewhat dependent on the DCNM Ansible Collection being installed.
-Note, we do not use anything related to Ansible.  nd-python is, as the name implies,
-pure Python.
+A basic quick start guide to this repository follows.
 
 ## 1. Create a $HOME/repos directory into which we'll clone nd-python
 
@@ -28,27 +22,11 @@ cd $HOME/repos
 git clone https://github.com/allenrobel/nd-python.git
 ```
 
-## 3. Clone the ansible-dcnm repository
-
-We want this repository to follow the standard Ansible path structure.
-
-```bash
-cd $HOME/repos
-mkdir ansible
-mkdir ansible/collections
-mkdir ansible/collections/ansible_collections
-mkdir ansible/collections/ansible_collections/cisco
-cd ansible/collections/ansible_collections/cisco
-git clone https://github.com/CiscoDevNet/ansible-dcnm.git
-# We need to rename the resulting directory from ansible-dcnm to dcnm
-mv ansible-dcnm dcnm
-```
-
-## 4. Install Python if it is not already installed
+## 3. Install Python if it is not already installed
 
 [python.org Downloads](https://www.python.org/downloads/)
 
-## 5. Create a virtual environment
+## 4. Create a virtual environment
 
 ```bash
 cd $HOME/repos/nd-python
@@ -58,7 +36,7 @@ python3 -m venv .venv --prompt nd-python
 /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m venv .venv --prompt nd-python
 ```
 
-## 6. Source the virtual environment
+## 5. Source the virtual environment
 
 - `source .venv/bin/activate`
 
@@ -66,25 +44,25 @@ python3 -m venv .venv --prompt nd-python
 source .venv/bin/activate
 ```
 
-## 7. upgrade pip
+## 6. upgrade pip
 
 ```bash
 pip install --upgrade pip
 ```
 
-## 8. Install uv
+## 7. Install uv
 
 ```bash
 pip install uv
 ```
 
-## 9. Use uv to install the other dependencies
+## 8. Use uv to install the other dependencies
 
 ```bash
 uv sync
 ```
 
-## 10. Set required environment variables
+## 9. Set required environment variables
 
 ```bash
 # Edit $HOME/repos/nd-python/env/02-nd
@@ -104,13 +82,13 @@ uv sync
 source $HOME/repos/nd-python/env/env
 ```
 
-## 11. Optionally, enable logging
+## 10. Optionally, enable logging
 
 ```bash
 export ND_LOGGING_CONFIG=$HOME/repos/nd-python/lib/nd_python/logging_config.json
 ```
 
-## 12. Run a script that does not take any arguments
+## 11. Run a script that does not take any arguments
 
 Let's try the login script since it does not require any arguments.
 
@@ -122,9 +100,10 @@ cd examples
 ./login.py
 ```
 
-## 13. Potential Ansible locale error
+## 12. Potential Ansible locale error
 
-If you see the following error.
+We support the optional use of Ansible Vault for credentials. Because of this,
+you may see the following error.
 
 ```bash
 ERROR: Ansible requires the locale encoding to be UTF-8; Detected ISO8859-1
@@ -191,7 +170,7 @@ LC_ALL=
 (nd-python) arobel@glide:~/repos/nd-python$
 ```
 
-## 14. Run a script that requires a config file
+## 13. Run a script that requires a config file
 
 Many of the scripts take a config file.
 
@@ -283,6 +262,6 @@ Default switch credentials saved for user admin
 (nd-python) arobel@Allen-M4 examples %
 ```
 
-## 16. Script Documentation
+## 14. Script Documentation
 
 Documentation is currently under construction.  We'll add a link here once it's ready.
