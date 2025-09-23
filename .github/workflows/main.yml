@@ -11,8 +11,8 @@ name: Lint Code Base
 #############################
 on:
   push:
-    # branches-ignore: [master, main]
-    # Uncomment the line above to disable run when pushing to master
+    branches-ignore: [main]
+    # Uncomment the line above to disable run when pushing to main
   # pull_request:
   #  branches: [master, main]
 
