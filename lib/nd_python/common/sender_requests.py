@@ -603,7 +603,7 @@ class Sender:
         method_name = inspect.stack()[0][3]
         if not isinstance(value, dict) and value is not None:
             msg = f"{self.class_name}.{method_name}: "
-            msg += f"{method_name} must be a dict, nor None. "
+            msg += f"{method_name} must be a dict, or None. "
             msg += f"Got type {type(value).__name__}, "
             msg += f"value {value}."
             raise TypeError(msg)
