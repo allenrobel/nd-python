@@ -73,16 +73,22 @@ class CredentialsDetailsGet:
             raise ValueError(msg) from error
         self._committed = True
 
+    def error_if_not_committed(self, method_name) -> None:
+        """
+        Raise an error if .commit() has not been called
+        """
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
+            raise ValueError(msg)
+
     @property
     def data(self) -> dict:
         """
         Get the data from the response
         """
         method_name = inspect.stack()[0][3]
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
-            raise ValueError(msg)
+        self.error_if_not_committed(method_name)
         return self.rest_send.response_current.get("DATA", {})
 
     @property
@@ -91,10 +97,7 @@ class CredentialsDetailsGet:
         Return NDUsername from the response
         """
         method_name = inspect.stack()[0][3]
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
-            raise ValueError(msg)
+        self.error_if_not_committed(method_name)
         return self.rest_send.response_current.get("DATA", {}).get("NDUsername", "")
 
     @property
@@ -103,10 +106,7 @@ class CredentialsDetailsGet:
         Return aaaPassthrough from the response
         """
         method_name = inspect.stack()[0][3]
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
-            raise ValueError(msg)
+        self.error_if_not_committed(method_name)
         return self.rest_send.response_current.get("DATA", {}).get("aaaPassthrough", False)
 
     @property
@@ -115,10 +115,7 @@ class CredentialsDetailsGet:
         Return credentialStoreError from the response
         """
         method_name = inspect.stack()[0][3]
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
-            raise ValueError(msg)
+        self.error_if_not_committed(method_name)
         return self.rest_send.response_current.get("DATA", {}).get("credentialStoreError", "")
 
     @property
@@ -127,10 +124,7 @@ class CredentialsDetailsGet:
         Return lanCredentialsSetByUser from the response
         """
         method_name = inspect.stack()[0][3]
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
-            raise ValueError(msg)
+        self.error_if_not_committed(method_name)
         return self.rest_send.response_current.get("DATA", {}).get("lanCredentialsSetByUser", "")
 
     @property
@@ -139,10 +133,7 @@ class CredentialsDetailsGet:
         Return robotSetByLoginUser from the response
         """
         method_name = inspect.stack()[0][3]
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
-            raise ValueError(msg)
+        self.error_if_not_committed(method_name)
         return self.rest_send.response_current.get("DATA", {}).get("robotSetByLoginUser", False)
 
     @property
@@ -151,8 +142,5 @@ class CredentialsDetailsGet:
         Return type from the response
         """
         method_name = inspect.stack()[0][3]
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
-            raise ValueError(msg)
+        self.error_if_not_committed(method_name)
         return self.rest_send.response_current.get("DATA", {}).get("type", "")
