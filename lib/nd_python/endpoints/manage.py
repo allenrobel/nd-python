@@ -89,3 +89,12 @@ class EpDefaultSwitchCredentialsSave:
     @switch_username.setter
     def switch_username(self, value):
         self._body["switchUsername"] = value
+
+
+class EpRobotSwitchCredentialsGet:
+    """Endpoint to get robot switch credentials"""
+
+    def __init__(self):
+        self.verb = "GET"
+        self.path = f"{credentials}/robotSwitchCredentials"
+        self.description = "Get Robot Switch Credentials"
