@@ -19,7 +19,7 @@ import inspect
 import logging
 
 from nd_python.common.properties import Properties
-from nd_python.endpoints.manage import EpRobotSwitchCredentialsGet
+from nd_python.endpoints.manage import EpCredentialsRobotSwitchGet
 
 
 class CredentialsRobotSwitchGet:
@@ -37,7 +37,7 @@ class CredentialsRobotSwitchGet:
 
     def __init__(self) -> None:
         self.class_name = self.__class__.__name__
-        self.endpoint = EpRobotSwitchCredentialsGet()
+        self.endpoint = EpCredentialsRobotSwitchGet()
         self.log = logging.getLogger(f"nd_python.{self.class_name}")
         self.properties = Properties()
         self.rest_send = self.properties.rest_send

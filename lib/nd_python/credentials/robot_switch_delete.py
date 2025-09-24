@@ -1,15 +1,12 @@
 """
 # Name
 
-default_switch_get.py
+robot_switch_delete.py
 
 # Description
 
-Retrieve default switch credentials from the controller.
+Delete robot switch credentials from the controller.
 
-# Payload Example
-
-This endpoint does not require a payload.
 """
 
 # We are using isort for import sorting.
@@ -19,29 +16,28 @@ import inspect
 import logging
 
 from nd_python.common.properties import Properties
-from nd_python.endpoints.manage import EpCredentialsDefaultSwitchGet
+from nd_python.endpoints.manage import EpCredentialsRobotSwitchDelete
 
 
-class CredentialsDefaultSwitchGet:
+class CredentialsRobotSwitchDelete:
     """
     # Summary
 
-    Get default switch credentials from the controller.
+    Delete robot switch credentials from the controller.
 
-    ## Example default switch get request
+    ## Example robot switch delete request
 
     ### See
 
-    ./examples/credentials_default_switch_get.py
+    ./examples/credentials_robot_switch_delete.py
     """
 
     def __init__(self) -> None:
         self.class_name = self.__class__.__name__
-        self.endpoint = EpCredentialsDefaultSwitchGet()
+        self.endpoint = EpCredentialsRobotSwitchDelete()
         self.log = logging.getLogger(f"nd_python.{self.class_name}")
         self.properties = Properties()
         self.rest_send = self.properties.rest_send
-        self._committed = False
 
     def _final_verification(self) -> None:
         """
@@ -57,7 +53,7 @@ class CredentialsDefaultSwitchGet:
 
     def commit(self) -> None:
         """
-        Retrieve default switch credentials from the controller
+        Delete robot switch credentials from the controller.
         """
         method_name = inspect.stack()[0][3]
         self._final_verification()
@@ -68,19 +64,6 @@ class CredentialsDefaultSwitchGet:
             self.rest_send.commit()
         except (TypeError, ValueError) as error:
             msg = f"{self.class_name}.{method_name}: "
-            msg += f"Unable to get {self.rest_send.verb} request from the controller. "
+            msg += f"Unable to send {self.rest_send.verb} request to the controller. "
             msg += f"Error details: {error}"
             raise ValueError(msg) from error
-        self._committed = True
-
-    @property
-    def data(self) -> dict:
-        """
-        Get the data from the response
-        """
-        method_name = inspect.stack()[0][3]
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing data"
-            raise ValueError(msg)
-        return self.rest_send.response_current.get("DATA", {})
