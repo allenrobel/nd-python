@@ -14,7 +14,7 @@ class EpDeleteDefaultSwitchCredentials:
         self.description = "Delete Default Switch Credentials"
 
 
-class EpGetCredentialsDetails:
+class EpCredentialsDetailsGet:
     """Endpoint to get credentials details"""
 
     def __init__(self):
