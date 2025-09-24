@@ -53,11 +53,11 @@ rest_send.response_handler = ResponseHandler()
 
 ### Endpoint Definition Pattern
 ```python
-class EpDefaultSwitchCredentialsSave:
+class EpCredentialsDefaultSwitchSave:
     def __init__(self):
         self.verb = "POST"
         self.path = f"{base_url}/defaultSwitchCredentials"
-        self.validator = EpDefaultSwitchCredentialsSaveValidator
+        self.validator = EpCredentialsDefaultSwitchSaveValidator
         
     def commit(self):
         # Pydantic validation before use
