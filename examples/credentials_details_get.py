@@ -41,7 +41,6 @@ export ND_LOGGING_CONFIG=$HOME/repos/nd-python/lib/nd_python/logging_config.json
 # pylint: disable=wrong-import-order
 
 import argparse
-import json
 import logging
 import sys
 
@@ -75,9 +74,16 @@ def action() -> None:
         return
 
     result_msg = "Credentials details:\n"
-    result_msg += f" {json.dumps(instance.data, indent=4, sort_keys=True)}"
-    log.info(result_msg)
     print(result_msg)
+
+    # Print individual fields
+    print("data:", instance.data)
+    print("nd_username:", instance.nd_username)
+    print("aaa_passthrough:", instance.aaa_passthrough)
+    print("credential_store_error:", instance.credential_store_error)
+    print("lan_credentials_set_by_user:", instance.lan_credentials_set_by_user)
+    print("robot_set_by_login_user:", instance.robot_set_by_login_user)
+    print("credential_type:", instance.credential_type)
 
 
 def setup_parser() -> argparse.Namespace:

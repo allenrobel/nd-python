@@ -81,6 +81,78 @@ class CredentialsDetailsGet:
         method_name = inspect.stack()[0][3]
         if not self._committed:
             msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing data"
+            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
             raise ValueError(msg)
         return self.rest_send.response_current.get("DATA", {})
+
+    @property
+    def nd_username(self) -> str:
+        """
+        Return NDUsername from the response
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
+            raise ValueError(msg)
+        return self.rest_send.response_current.get("DATA", {}).get("NDUsername", "")
+
+    @property
+    def aaa_passthrough(self) -> bool:
+        """
+        Return aaaPassthrough from the response
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
+            raise ValueError(msg)
+        return self.rest_send.response_current.get("DATA", {}).get("aaaPassthrough", False)
+
+    @property
+    def credential_store_error(self) -> str:
+        """
+        Return credentialStoreError from the response
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
+            raise ValueError(msg)
+        return self.rest_send.response_current.get("DATA", {}).get("credentialStoreError", "")
+
+    @property
+    def lan_credentials_set_by_user(self) -> str:
+        """
+        Return lanCredentialsSetByUser from the response
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
+            raise ValueError(msg)
+        return self.rest_send.response_current.get("DATA", {}).get("lanCredentialsSetByUser", "")
+
+    @property
+    def robot_set_by_login_user(self) -> bool:
+        """
+        Return robotSetByLoginUser from the response
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
+            raise ValueError(msg)
+        return self.rest_send.response_current.get("DATA", {}).get("robotSetByLoginUser", False)
+
+    @property
+    def credential_type(self) -> str:
+        """
+        Return type from the response
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
+            raise ValueError(msg)
+        return self.rest_send.response_current.get("DATA", {}).get("type", "")
