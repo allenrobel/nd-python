@@ -73,7 +73,7 @@ class CredentialsDetailsGet:
             raise ValueError(msg) from error
         self._committed = True
 
-    def error_if_not_committed(self, method_name) -> None:
+    def error_if_not_committed(self, method_name: str) -> None:
         """
         Raise an error if .commit() has not been called
         """

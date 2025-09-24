@@ -112,7 +112,7 @@ class CredentialsDefaultSwitchSave:
         return self._switch_password
 
     @switch_password.setter
-    def switch_password(self, value):
+    def switch_password(self, value: str) -> None:
         self._switch_password = value
 
     @property
@@ -123,5 +123,5 @@ class CredentialsDefaultSwitchSave:
         return self._switch_username
 
     @switch_username.setter
-    def switch_username(self, value):
+    def switch_username(self, value: str) -> None:
         self._switch_username = value
