@@ -55,7 +55,7 @@ from nd_python.parsers.parser_nd_domain import parser_nd_domain
 from nd_python.parsers.parser_nd_ip4 import parser_nd_ip4
 from nd_python.parsers.parser_nd_password import parser_nd_password
 from nd_python.parsers.parser_nd_username import parser_nd_username
-from nd_python.validators.credentials_default_switch_save import CredentialsDefaultSwitchSaveConfigValidator
+from nd_python.validators.credentials.default_switch_save import CredentialsDefaultSwitchSaveConfigValidator
 from pydantic import ValidationError
 
 
