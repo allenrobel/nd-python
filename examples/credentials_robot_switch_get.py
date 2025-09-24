@@ -4,7 +4,7 @@
 
 ## Description
 
-Retrieve default switch credentials from the controller.
+Retrieve robot switch credentials from the controller.
 
 ## Usage
 
