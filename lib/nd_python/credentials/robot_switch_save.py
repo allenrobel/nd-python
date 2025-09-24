@@ -1,11 +1,11 @@
 """
 # Name
 
-default_switch_save.py
+robot_switch_save.py
 
 # Description
 
-Save default switch credentials to the controller.
+Save robot switch credentials to the controller.
 
 # Payload Example
 
@@ -24,25 +24,25 @@ import inspect
 import logging
 
 from nd_python.common.properties import Properties
-from nd_python.endpoints.manage import EpCredentialsDefaultSwitchSave
+from nd_python.endpoints.manage import EpCredentialsRobotSwitchSave
 
 
-class CredentialsDefaultSwitchSave:
+class CredentialsRobotSwitchSave:
     """
     # Summary
 
-    Save default switch credentials to the controller.
+    Save robot switch credentials to the controller.
 
-    ## Example default switch save request
+    ## Example robot switch save request
 
     ### See
 
-    ./examples/credentials_default_switch_save.py
+    ./examples/credentials_robot_switch_save.py
     """
 
     def __init__(self) -> None:
         self.class_name = self.__class__.__name__
-        self.endpoint = EpCredentialsDefaultSwitchSave()
+        self.endpoint = EpCredentialsRobotSwitchSave()
         self.log = logging.getLogger(f"nd_python.{self.class_name}")
         self.properties = Properties()
         self.rest_send = self.properties.rest_send
@@ -68,6 +68,7 @@ class CredentialsDefaultSwitchSave:
             msg += f"Call {self.class_name}.switch_username "
             msg += f"before calling {self.class_name}.commit"
             raise ValueError(msg)
+
         if self._switch_password == "":
             msg = f"{self.class_name}.{method_name}: "
             msg += f"Call {self.class_name}.switch_password "
@@ -76,7 +77,7 @@ class CredentialsDefaultSwitchSave:
 
     def commit(self) -> None:
         """
-        Create a network
+        Save robot switch credentials to the controller.
         """
         method_name = inspect.stack()[0][3]
         self._final_verification()
@@ -93,6 +94,7 @@ class CredentialsDefaultSwitchSave:
 
         self._payload["switchUsername"] = self.endpoint.switch_username
         self._payload["switchPassword"] = self.endpoint.switch_password
+        self._payload["isRobot"] = True
         try:
             self.rest_send.path = self.endpoint.path
             self.rest_send.verb = self.endpoint.verb
