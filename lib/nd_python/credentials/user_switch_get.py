@@ -5,7 +5,7 @@ robot_switch_get.py
 
 # Description
 
-Retrieve robot switch credentials from the controller.
+Retrieve user switch credentials from the controller.
 
 # Payload Example
 
