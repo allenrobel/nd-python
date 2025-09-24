@@ -74,7 +74,7 @@ class CredentialsDefaultSwitchGet:
         self._committed = True
 
     @property
-    def data(self):
+    def data(self) -> dict:
         """
         Get the data from the response
         """
