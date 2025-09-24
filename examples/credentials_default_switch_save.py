@@ -109,7 +109,7 @@ def setup_parser() -> argparse.Namespace:
 args = setup_parser()
 NdPythonLogger()
 log = logging.getLogger("nd_python.main")
-log.setLevel = args.loglevel
+log.setLevel(args.loglevel)
 
 try:
     user_config = ReadConfig()
