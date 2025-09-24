@@ -1,11 +1,11 @@
-from nd_python.validators.endpoints.manage import EpDefaultSwitchCredentialsSaveValidator
+from nd_python.validators.endpoints.manage import EpCredentialsDefaultSwitchSaveValidator
 from pydantic import ValidationError
 
 base = "/api/v1/manage"
 credentials = f"{base}/credentials"
 
 
-class EpDefaultSwitchCredentialsDelete:
+class EpCredentialsDefaultSwitchDelete:
     """Endpoint to delete default switch credentials"""
 
     def __init__(self):
@@ -23,7 +23,7 @@ class EpCredentialsDetailsGet:
         self.description = "Get Credentials Details"
 
 
-class EpDefaultSwitchCredentialsGet:
+class EpCredentialsDefaultSwitchGet:
     """Endpoint to get default switch credentials"""
 
     def __init__(self):
@@ -32,7 +32,7 @@ class EpDefaultSwitchCredentialsGet:
         self.description = "Get Default Switch Credentials"
 
 
-class EpDefaultSwitchCredentialsSave:
+class EpCredentialsDefaultSwitchSave:
     """
     # Summary
 
@@ -41,7 +41,7 @@ class EpDefaultSwitchCredentialsSave:
     ## Usage
 
     ```python
-    ep = EpDefaultSwitchCredentialsSave()
+    ep = EpCredentialsDefaultSwitchSave()
     ep.switch_username = "admin"
     ep.switch_password = "password"
     ep.commit()
@@ -51,7 +51,7 @@ class EpDefaultSwitchCredentialsSave:
 
     def __init__(self):
         self._committed = False
-        self.validator = EpDefaultSwitchCredentialsSaveValidator
+        self.validator = EpCredentialsDefaultSwitchSaveValidator
         self._body = {}
         self.verb = "POST"
         self.path = f"{credentials}/defaultSwitchCredentials"
@@ -73,28 +73,28 @@ class EpDefaultSwitchCredentialsSave:
         return self._body
 
     @property
-    def switch_password(self):
+    def switch_password(self) -> str:
         """Set (setter) or return (getter) the switch password"""
         return self._body.get("switchPassword")
 
     @switch_password.setter
-    def switch_password(self, value):
+    def switch_password(self, value: str) -> None:
         self._body["switchPassword"] = value
 
     @property
-    def switch_username(self):
+    def switch_username(self) -> str:
         """Set (setter) or return (getter) the switch username"""
         return self._body.get("switchUsername")
 
     @switch_username.setter
-    def switch_username(self, value):
+    def switch_username(self, value: str) -> None:
         self._body["switchUsername"] = value
 
 
-class EpRobotSwitchCredentialsGet:
+class EpCredentialsRobotSwitchGet:
     """Endpoint to get robot switch credentials"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.verb = "GET"
         self.path = f"{credentials}/robotSwitchCredentials"
         self.description = "Get Robot Switch Credentials"
