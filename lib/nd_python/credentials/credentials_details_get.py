@@ -68,7 +68,7 @@ class CredentialsDetailsGet:
             self.rest_send.commit()
         except (TypeError, ValueError) as error:
             msg = f"{self.class_name}.{method_name}: "
-            msg += f"Unable to get {self.rest_send.verb} request from the controller. "
+            msg += f"Unable to send {self.rest_send.verb} request to the controller. "
             msg += f"Error details: {error}"
             raise ValueError(msg) from error
         self._committed = True
