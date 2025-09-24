@@ -16,7 +16,7 @@ import inspect
 import logging
 
 from nd_python.common.properties import Properties
-from nd_python.endpoints.manage import EpDeleteDefaultSwitchCredentials
+from nd_python.endpoints.manage import EpDefaultSwitchCredentialsDelete
 
 
 class CredentialsDefaultSwitchDelete:
@@ -34,7 +34,7 @@ class CredentialsDefaultSwitchDelete:
 
     def __init__(self) -> None:
         self.class_name = self.__class__.__name__
-        self.endpoint = EpDeleteDefaultSwitchCredentials()
+        self.endpoint = EpDefaultSwitchCredentialsDelete()
         self.log = logging.getLogger(f"nd_python.{self.class_name}")
         self.properties = Properties()
         self.rest_send = self.properties.rest_send

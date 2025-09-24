@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class EpSaveDefaultSwitchCredentialsValidator(BaseModel):
+class EpDefaultSwitchCredentialsSaveValidator(BaseModel):
     """Save Default Switch Credentials Endpoint Payload Model"""
 
     switch_username: str = Field(..., alias="switchUsername", description="Switch Username")
