@@ -87,7 +87,7 @@ def action(cfg: CredentialsUserSwitchSaveConfigItem) -> None:
         print(errmsg)
         return
 
-    print(f"switch_name {cfg.switch_name} switch_username {cfg.switch_username} switch credentials saved")
+    print(f"fabric_name {cfg.fabric_name} switch_name {cfg.switch_name} switch_username {cfg.switch_username} credentials saved")
 
 
 def setup_parser() -> argparse.Namespace:
