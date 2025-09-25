@@ -1,8 +1,6 @@
+from nd_python.endpoints.base.endpoint import credentials
 from nd_python.validators.endpoints.manage import EpCredentialsDefaultSwitchSaveValidator, EpCredentialsRobotSwitchSaveValidator
 from pydantic import ValidationError
-
-base = "/api/v1/manage"
-credentials = f"{base}/credentials"
 
 
 class EpCredentialsDefaultSwitchDelete:
@@ -176,3 +174,11 @@ class EpCredentialsUserSwitchGet:
         self.verb = "GET"
         self.path = f"{credentials}/switches"
         self.description = "Get User Switch Credentials"
+
+class EpCredentialsUserSwitchSave:
+    """Endpoint to save user switch credentials"""
+
+    def __init__(self) -> None:
+        self.verb = "POST"
+        self.path = f"{credentials}/switches"
+        self.description = "Save User Switch Credentials"
