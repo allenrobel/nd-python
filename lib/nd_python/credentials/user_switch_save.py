@@ -68,7 +68,7 @@ class CredentialsUserSwitchSave:
     def _verify_property(self, method_name: str, property_name: str) -> None:
         if not getattr(self, property_name, None):
             msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.{property_name} must be set before callling "
+            msg += f"{self.class_name}.{property_name} must be set before calling "
             msg += f"{self.class_name}.commit"
             raise ValueError(msg)
 
