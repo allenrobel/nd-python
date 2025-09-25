@@ -175,6 +175,7 @@ class EpCredentialsUserSwitchGet:
         self.path = f"{credentials}/switches"
         self.description = "Get User Switch Credentials"
 
+
 class EpCredentialsUserSwitchSave:
     """Endpoint to save user switch credentials"""
 
