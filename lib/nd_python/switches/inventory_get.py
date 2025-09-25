@@ -286,7 +286,7 @@ class SwitchesInventoryGet:
         return self.rest_send.response_current.get("DATA", {})
 
     @property
-    def devices(self):
+    def devices(self) -> list:
         """
         return a list of device names in the fabric inventory
         """
