@@ -276,15 +276,6 @@ class SwitchesInventoryGet:
             raise ValueError(msg)
         return switch_name
 
-    def error_if_not_committed(self, method_name) -> None:
-        """
-        Raise an error if .commit() has not been called
-        """
-        if not self._committed:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"{self.class_name}.commit() must be called before accessing {method_name}"
-            raise ValueError(msg)
-
     @property
     def data(self) -> dict:
         """
