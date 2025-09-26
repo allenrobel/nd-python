@@ -63,7 +63,13 @@ class CredentialsRobotSwitchSave:
         Raises:
             ValueError: If the property is not set
         """
-        if getattr(self, property_name, None) is None:
+        # Map property names to the actual attribute to check
+        attr_map = {
+            "config": "_config",
+            "rest_send": "rest_send",
+        }
+        attr_name = attr_map.get(property_name, property_name)
+        if getattr(self, attr_name, None) is None:
             msg = f"{self.class_name}.{method_name}: "
             msg += f"{self.class_name}.{property_name} must be set before calling "
             msg += f"{self.class_name}.commit"
