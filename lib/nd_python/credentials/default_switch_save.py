@@ -48,8 +48,10 @@ class CredentialsDefaultSwitchSave:
         self.properties = Properties()
         self.rest_send = self.properties.rest_send
 
+        self._committed: bool = False
         self._config: CredentialsDefaultSwitchSaveConfigValidator = None
         self._payload: dict[str, str] = {}
+        self._result: str = ""
 
     def _verify_property(self, method_name: str, property_name: str) -> None:
         """Verify that a property is set before calling commit.
@@ -77,7 +79,7 @@ class CredentialsDefaultSwitchSave:
 
     def commit(self) -> None:
         """
-        Create a network
+        Save default switch credentials to the controller.
         """
         method_name = inspect.stack()[0][3]
         self._final_verification()
@@ -105,6 +107,9 @@ class CredentialsDefaultSwitchSave:
             msg += f"Error details: {error}"
             raise ValueError(msg) from error
 
+        self._committed = True
+        self.result = f"Default switch credentials saved for user {self._config.switch_username}"
+
     @property
     def config(self) -> CredentialsDefaultSwitchSaveConfigValidator:
         """
@@ -115,3 +120,24 @@ class CredentialsDefaultSwitchSave:
     @config.setter
     def config(self, value: CredentialsDefaultSwitchSaveConfigValidator) -> None:
         self._config = value
+
+    @property
+    def result(self) -> str:
+        """
+        Result of the commit operation.
+
+        Set (setter) or return (getter) the result as a string
+
+        The setter appends to the result string.
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit must be called before accessing "
+            msg += f"{self.class_name}.{method_name}"
+            raise ValueError(msg)
+        return self._result
+
+    @result.setter
+    def result(self, value: str) -> None:
+        self._result += value
