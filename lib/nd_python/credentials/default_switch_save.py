@@ -48,7 +48,7 @@ class CredentialsDefaultSwitchSave:
         self.properties = Properties()
         self.rest_send = self.properties.rest_send
 
-        self._config: CredentialsDefaultSwitchSaveConfigValidator
+        self._config = None
         self._payload: dict[str, str] = {}
 
     def _verify_property(self, method_name: str, property_name: str) -> None:
