@@ -60,7 +60,7 @@ class CredentialsUserSwitchSave:
         self.rest_send = self.properties.rest_send
 
         self._committed = False
-        self._config: dict[str, list[dict]] = {}
+        self._config: CredentialsUserSwitchSaveConfigValidator
         self._fabric_name = ""
         self._fabric_inventory: dict[str, dict] = {}
         self._payload: dict[str, Any] = {}
@@ -108,22 +108,22 @@ class CredentialsUserSwitchSave:
         """
         self._result = "User switch credentials saved successfully for the following devices:\n"
         _serial_numbers = []
-        for item in self.config.switches:
+        for item in self._config.switches:
             self.populate_fabric_inventory(item.fabric_name)
             serial_number = self._fabric_inventory.get(item.fabric_name, {}).get(item.switch_name, {}).get("serialNumber", "")
             if not serial_number:
                 msg = f"switch_name {item.switch_name} not found in fabric {item.fabric_name}"
                 raise ValueError(msg)
             _serial_numbers.append({"switchId": serial_number})
-            self.result = f"Fabric {item.fabric_name} switch {item.switch_name} serial number {serial_number} switch_username {self.config.switch_username}.\n"
+            self.result = f"Fabric {item.fabric_name} switch {item.switch_name} serial number {serial_number} switch_username {self._config.switch_username}.\n"
 
         if len(_serial_numbers) == 0:
             msg = "No valid switches found to save credentials"
             raise ValueError(msg)
 
         self._payload["switchIds"] = _serial_numbers
-        self._payload["switchUsername"] = self.config.switch_username
-        self._payload["switchPassword"] = self.config.switch_password
+        self._payload["switchUsername"] = self._config.switch_username
+        self._payload["switchPassword"] = self._config.switch_password
 
     def commit(self) -> None:
         """
