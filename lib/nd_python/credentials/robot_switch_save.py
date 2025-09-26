@@ -81,7 +81,9 @@ class CredentialsRobotSwitchSave:
         """
         method_name = inspect.stack()[0][3]
         self._verify_property(method_name, "config")
-        self._verify_property(method_name, "rest_send")
+        if self.properties.rest_send is None:
+            msg = f"{self.class_name}.{method_name}: self.properties.rest_send must be set before calling {self.class_name}.commit"
+            raise ValueError(msg)
 
     def commit(self) -> None:
         """
