@@ -68,8 +68,7 @@ def action(cfg: CredentialsRobotSwitchSaveConfigValidator) -> None:
     try:
         instance = CredentialsRobotSwitchSave()
         instance.rest_send = rest_send
-        instance.switch_username = cfg.switch_username
-        instance.switch_password = cfg.switch_password
+        instance.config = cfg
         instance.commit()
     except ValueError as error:
         errmsg += f"Error detail: {error}"
@@ -77,9 +76,8 @@ def action(cfg: CredentialsRobotSwitchSaveConfigValidator) -> None:
         print(errmsg)
         return
 
-    result_msg = f"robot switch credentials saved for user {cfg.switch_username}"
-    log.info(result_msg)
-    print(result_msg)
+    log.info(instance.result)
+    print(instance.result)
 
 
 def setup_parser() -> argparse.Namespace:
