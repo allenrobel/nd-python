@@ -48,11 +48,20 @@ class CredentialsDefaultSwitchSave:
         self.properties = Properties()
         self.rest_send = self.properties.rest_send
 
-        self._config = None
+        self._config: CredentialsDefaultSwitchSaveConfigValidator = None
         self._payload: dict[str, str] = {}
 
     def _verify_property(self, method_name: str, property_name: str) -> None:
-        if not getattr(self, property_name, None):
+        """Verify that a property is set before calling commit.
+
+        Args:
+            method_name (str): _description_
+            property_name (str): _description_
+
+        Raises:
+            ValueError: _description_
+        """
+        if getattr(self, property_name, None) is None:
             msg = f"{self.class_name}.{method_name}: "
             msg += f"{self.class_name}.{property_name} must be set before calling "
             msg += f"{self.class_name}.commit"
