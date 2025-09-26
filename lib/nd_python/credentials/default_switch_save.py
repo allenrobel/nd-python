@@ -55,11 +55,11 @@ class CredentialsDefaultSwitchSave:
         """Verify that a property is set before calling commit.
 
         Args:
-            method_name (str): _description_
-            property_name (str): _description_
+            method_name (str): The calling method name
+            property_name (str): The name of the property to validate
 
         Raises:
-            ValueError: _description_
+            ValueError: If the property is not set
         """
         if getattr(self, property_name, None) is None:
             msg = f"{self.class_name}.{method_name}: "
