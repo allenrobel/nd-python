@@ -33,14 +33,24 @@ export ND_LOGGING_CONFIG=$HOME/repos/nd-python/lib/nd_python/logging_config.json
     --nd-username admin
 ```
 
-## Notes
+## Configuration File
 
 The configuration file contains the following parameters:
 
 - config: Required; list of dictionaries with the following keys:
+  - fabric_name: Required; name of the fabric.
   - switch_name: Required; name of the switch.
-  - switch_username: Required; username for the switch.
-  - switch_password: Required; password for the switch.
+
+### Example configuration file
+
+```yaml
+---
+config:
+  - fabric_name: SITE1
+    switch_name: BG1
+  - fabric_name: SITE1
+    switch_name: LE1
+```  
 """
 # pylint: disable=duplicate-code
 # We are using isort for import sorting.
@@ -69,10 +79,10 @@ from pydantic import ValidationError
 
 def action(cfg: CredentialsUserSwitchDeleteConfigValidator) -> None:
     """
-    Save user switch credentials.
+    Delete user switch credentials.
     """
     # Prepopulate error message in case of failure
-    errmsg = "Error saving user switch credentials. "
+    errmsg = "Error deleting user switch credentials. "
     try:
         instance = CredentialsUserSwitchDelete()
         instance.rest_send = rest_send
@@ -107,7 +117,7 @@ def setup_parser() -> argparse.Namespace:
             parser_nd_password,
             parser_nd_username,
         ],
-        description="DESCRIPTION: Save user switch credentials to the controller.",
+        description="DESCRIPTION: Delete user switch credentials from the controller.",
     )
     return parser.parse_args()
 
