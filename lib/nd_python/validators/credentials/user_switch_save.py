@@ -1,17 +1,15 @@
 from pydantic import BaseModel, Field
 
 
-class CredentialsUserSwitchSaveConfigItem(BaseModel):
+class Switches(BaseModel):
     """
     # Summary
 
-    Validate config parameters for saving user switch credentials.
+    Information needed to target specific switches.
     """
 
     fabric_name: str = Field(..., min_length=1, max_length=64, description="Fabric Name")
     switch_name: str = Field(..., min_length=1, description="Switch Name")
-    switch_username: str = Field(..., min_length=1, description="Switch Username")
-    switch_password: str = Field(..., min_length=1, description="Switch Password")
 
 
 class CredentialsUserSwitchSaveConfigValidator(BaseModel):
@@ -21,4 +19,6 @@ class CredentialsUserSwitchSaveConfigValidator(BaseModel):
     Validate config parameters for saving user switch credentials.
     """
 
-    config: list[CredentialsUserSwitchSaveConfigItem]
+    switch_username: str = Field(..., min_length=1, description="Switch Username")
+    switch_password: str = Field(..., min_length=1, description="Switch Password")
+    switches: list[Switches]

@@ -51,13 +51,13 @@ class CredentialsUserSwitchDelete:
         self.log = logging.getLogger(f"nd_python.{self.class_name}")
         self.properties = Properties()
         self.rest_send = self.properties.rest_send
-        self._result: str = ""
 
         self._committed = False
         self._config: dict[str, list[dict]] = {}
         self._fabric_name = ""
         self._fabric_inventory: dict[str, dict] = {}
         self._payload: dict[str, list[str]] = {}
+        self._result: str = ""
         self._switch_name = ""
 
     def _verify_property(self, method_name: str, property_name: str) -> None:
@@ -137,7 +137,7 @@ class CredentialsUserSwitchDelete:
     @property
     def config(self) -> CredentialsUserSwitchDeleteConfigValidator:
         """
-        Set (setter) or return (getter) the configuration as a dictionary
+        Set (setter) or return (getter) the configuration as a Pydantic model
         """
         return self._config
 
