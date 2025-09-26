@@ -68,8 +68,7 @@ def action(cfg: CredentialsDefaultSwitchSaveConfigValidator) -> None:
     try:
         instance = CredentialsDefaultSwitchSave()
         instance.rest_send = rest_send
-        instance.switch_username = cfg.switch_username
-        instance.switch_password = cfg.switch_password
+        instance.config = cfg
         instance.commit()
     except ValueError as error:
         errmsg += f"Error detail: {error}"
