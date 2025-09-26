@@ -183,3 +183,12 @@ class EpCredentialsUserSwitchSave:
         self.verb = "POST"
         self.path = f"{credentials}/switches"
         self.description = "Save User Switch Credentials"
+
+
+class EpCredentialsUserSwitchDelete:
+    """Endpoint to delete user switch credentials"""
+
+    def __init__(self) -> None:
+        self.verb = "POST"
+        self.path = f"{credentials}/switches/actions/remove"
+        self.description = "Delete User Switch Credentials"
