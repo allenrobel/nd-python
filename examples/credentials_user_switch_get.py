@@ -95,14 +95,6 @@ def action(cfg: CredentialsUserSwitchGetConfigValidator) -> None:
         return
     if cfg.filter:
         instance.filter = cfg.filter
-        errmsg += f"filter: {cfg.filter}. "
-        try:
-            instance.set_filtered_data()
-        except ValueError as error:
-            errmsg += f"Error detail: {error}"
-            log.error(errmsg)
-            print(errmsg)
-            return
 
     print("User switch credentials (all switches):\n")
     print(f"data: {instance.data}")
