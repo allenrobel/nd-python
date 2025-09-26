@@ -79,7 +79,18 @@ class CredentialsDefaultSwitchSave:
 
     def commit(self) -> None:
         """
-        Save default switch credentials to the controller.
+        Saves the default switch credentials to the controller.
+
+        This method performs the following steps:
+        1. Verifies that all required properties are set.
+        2. Sets the switch username and password on the endpoint.
+        3. Commits the endpoint, validating the credentials.
+        4. Prepares the payload and sends a REST request to the controller to save the credentials.
+        5. Updates the result property upon successful completion.
+
+        Raises:
+            ValueError: If required properties are not set, if endpoint validation fails,
+                or if sending the REST request to the controller fails.
         """
         method_name = inspect.stack()[0][3]
         self._final_verification()
