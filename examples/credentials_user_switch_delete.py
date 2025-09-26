@@ -50,7 +50,7 @@ config:
     switch_name: BG1
   - fabric_name: SITE1
     switch_name: LE1
-```  
+```
 """
 # pylint: disable=duplicate-code
 # We are using isort for import sorting.
