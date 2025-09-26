@@ -64,11 +64,11 @@ from nd_python.parsers.parser_nd_domain import parser_nd_domain
 from nd_python.parsers.parser_nd_ip4 import parser_nd_ip4
 from nd_python.parsers.parser_nd_password import parser_nd_password
 from nd_python.parsers.parser_nd_username import parser_nd_username
-from nd_python.validators.credentials.user_switch_save import CredentialsUserSwitchSaveConfigItem, CredentialsUserSwitchSaveConfigValidator
+from nd_python.validators.credentials.user_switch_save import CredentialsUserSwitchSaveConfigValidator
 from pydantic import ValidationError
 
 
-def action(cfg: CredentialsUserSwitchSaveConfigItem) -> None:
+def action(cfg: CredentialsUserSwitchSaveConfigValidator) -> None:
     """
     Save user switch credentials.
     """
@@ -76,11 +76,8 @@ def action(cfg: CredentialsUserSwitchSaveConfigItem) -> None:
     errmsg = "Error saving user switch credentials. "
     try:
         instance = CredentialsUserSwitchSave()
+        instance.config = cfg
         instance.rest_send = rest_send
-        instance.fabric_name = cfg.fabric_name
-        instance.switch_name = cfg.switch_name
-        instance.switch_username = cfg.switch_username
-        instance.switch_password = cfg.switch_password
         instance.commit()
     except ValueError as error:
         errmsg += f"Error detail: {error}"
@@ -88,7 +85,7 @@ def action(cfg: CredentialsUserSwitchSaveConfigItem) -> None:
         print(errmsg)
         return
 
-    print(f"fabric_name {cfg.fabric_name} switch_name {cfg.switch_name} switch_username {cfg.switch_username} credentials saved")
+    print(instance.result)
 
 
 def setup_parser() -> argparse.Namespace:
@@ -154,5 +151,4 @@ rest_send.response_handler = ResponseHandler()
 rest_send.timeout = 2
 rest_send.send_interval = 5
 
-for item in validator.config:
-    action(item)
+action(validator)

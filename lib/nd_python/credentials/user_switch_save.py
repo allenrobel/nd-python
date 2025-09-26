@@ -35,6 +35,7 @@ from typing import Any
 from nd_python.common.properties import Properties
 from nd_python.endpoints.manage import EpCredentialsUserSwitchSave
 from nd_python.switches.inventory_get import SwitchesInventoryGet
+from nd_python.validators.credentials.user_switch_save import CredentialsUserSwitchSaveConfigValidator
 
 
 class CredentialsUserSwitchSave:
@@ -59,8 +60,11 @@ class CredentialsUserSwitchSave:
         self.rest_send = self.properties.rest_send
 
         self._committed = False
+        self._config: dict[str, list[dict]] = {}
         self._fabric_name = ""
+        self._fabric_inventory: dict[str, dict] = {}
         self._payload: dict[str, Any] = {}
+        self._result: str = ""
         self._switch_name = ""
         self._switch_username = ""
         self._switch_password = ""
@@ -77,30 +81,49 @@ class CredentialsUserSwitchSave:
         final verification of all parameters
         """
         method_name = inspect.stack()[0][3]
-        self._verify_property(method_name, "fabric_name")
+        self._verify_property(method_name, "config")
         self._verify_property(method_name, "rest_send")
-        self._verify_property(method_name, "switch_name")
-        self._verify_property(method_name, "switch_password")
-        self._verify_property(method_name, "switch_username")
+
+    def populate_fabric_inventory(self, fabric_name: str) -> None:
+        """
+        Add fabric_name, if it exists, to self._fabric_inventory
+        """
+        method_name = inspect.stack()[0][3]
+        if fabric_name in self._fabric_inventory:
+            return
+        self.inventory.fabric_name = fabric_name
+        self.inventory.rest_send = self.rest_send
+        try:
+            self.inventory.commit()
+        except ValueError as error:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"Error populating fabric inventory for fabric {fabric_name}. "
+            msg += f"Error details: {error}"
+            raise ValueError(msg) from error
+        self._fabric_inventory[fabric_name] = self.inventory.inventory_by_switch_name
 
     def build_payload(self) -> None:
         """
         Build the payload for the request
         """
-        self._payload = {}
-        self.inventory.fabric_name = self.fabric_name
-        self.inventory.rest_send = self.rest_send
-        self.inventory.commit()
-        serial_number = self.inventory.switch_name_to_serial_number(self.switch_name)
-        if not serial_number:
-            msg = f"switch_name {self.switch_name} not found in fabric {self.fabric_name}"
+        self._result = "User switch credentials saved successfully for the following devices:\n"
+        _serial_numbers = []
+        for item in self.config.switches:
+            self.populate_fabric_inventory(item.fabric_name)
+            serial_number = self._fabric_inventory.get(item.fabric_name, {}).get(item.switch_name, {}).get("serialNumber", "")
+            if not serial_number:
+                msg = f"switch_name {item.switch_name} not found in fabric {item.fabric_name}"
+                raise ValueError(msg)
+            _serial_numbers.append({"switchId": serial_number})
+            self.result = f"Fabric {item.fabric_name} switch {item.switch_name} serial number {serial_number} switch_username {self.config.switch_username}.\n"
+
+        if len(_serial_numbers) == 0:
+            msg = "No valid switches found to save credentials"
             raise ValueError(msg)
 
-        self._payload = {
-            "switchIds": [{"switchId": serial_number}],
-            "switchUsername": self.switch_username,
-            "switchPassword": self.switch_password,
-        }
+        self._payload["switchIds"] = _serial_numbers
+        self._payload["switchUsername"] = self.config.switch_username
+        self._payload["switchPassword"] = self.config.switch_password
 
     def commit(self) -> None:
         """
@@ -123,45 +146,49 @@ class CredentialsUserSwitchSave:
         self._committed = True
 
     @property
-    def fabric_name(self) -> str:
+    def config(self) -> CredentialsUserSwitchSaveConfigValidator:
         """
-        Set (setter) or return (getter) fabric_name
+        Set (setter) or return (getter) the configuration as a Pydantic model
         """
-        return self._fabric_name
+        return self._config
 
-    @fabric_name.setter
-    def fabric_name(self, value: str) -> None:
-        self._fabric_name = value
-
-    @property
-    def switch_name(self) -> str:
-        """
-        Set (setter) or return (getter) switch_name
-        """
-        return self._switch_name
-
-    @switch_name.setter
-    def switch_name(self, value: str) -> None:
-        self._switch_name = value
+    @config.setter
+    def config(self, value: CredentialsUserSwitchSaveConfigValidator) -> None:
+        self._config = value
 
     @property
-    def switch_password(self) -> str:
+    def fabric_inventory(self) -> dict[str, dict]:
         """
-        Set (setter) or return (getter) switch_password
-        """
-        return self._switch_password
+        Return fabric_inventory (dict[str, dict])
 
-    @switch_password.setter
-    def switch_password(self, value: str) -> None:
-        self._switch_password = value
+        Keyed on fabric_name, value is a dict keyed on switch_name with
+        values of dicts containing switch details.
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit must be called before accessing "
+            msg += f"{self.class_name}.{method_name}"
+            raise ValueError(msg)
+        return self._fabric_inventory
 
     @property
-    def switch_username(self) -> str:
+    def result(self) -> str:
         """
-        Set (setter) or return (getter) switch_username
-        """
-        return self._switch_username
+        Result of the commit operation.
 
-    @switch_username.setter
-    def switch_username(self, value: str) -> None:
-        self._switch_username = value
+        Set (setter) or return (getter) the result as a string
+
+        The setter appends to the result string.
+        """
+        method_name = inspect.stack()[0][3]
+        if not self._committed:
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{self.class_name}.commit must be called before accessing "
+            msg += f"{self.class_name}.{method_name}"
+            raise ValueError(msg)
+        return self._result
+
+    @result.setter
+    def result(self, value: str) -> None:
+        self._result += value
