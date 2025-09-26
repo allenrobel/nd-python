@@ -35,7 +35,6 @@ class CredentialsUserSwitchGet:
     instance.rest_send = rest_send
     instance.commit()
     instance.filter = "mySwitchName"
-    instance.set_filtered_data()
     print(f"data: {json.dumps(instance.data, indent=4, sort_keys=True)}")
     print(f"filtered_data: {json.dumps(instance.filtered_data, indent=4, sort_keys=True)}")
     print(f"credential_store: {instance.credential_store}")
@@ -89,7 +88,7 @@ class CredentialsUserSwitchGet:
             raise ValueError(msg) from error
         self._committed = True
 
-    def set_filtered_data(self) -> None:
+    def _set_filtered_data(self) -> None:
         """
         Set the filtered data from the response
         """
@@ -171,12 +170,14 @@ class CredentialsUserSwitchGet:
         filter is a string representing the switch name.
         """
         method_name = inspect.stack()[0][3]
+        self.error_if_not_committed(method_name)
         if not isinstance(value, str):
             msg = f"{self.class_name}.{method_name}: "
             msg += "filter must be a string. "
             msg += f"Got: {type(value)} ({value})"
             raise ValueError(msg)
         self._filter = value
+        self._set_filtered_data()
 
     @property
     def filtered_data(self) -> dict:
