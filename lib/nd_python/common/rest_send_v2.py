@@ -26,20 +26,20 @@ from nd_python.common.response_handler import ResponseHandler
 
 # Using only for its failed_result property
 from nd_python.common.results import Results
-from nd_python.common.sender_requests import Sender
+from nd_python.common.sender_protocol import SenderProtocol
 
 
 class RestSend:
     """
     ### Summary
     -   Send REST requests to the controller with retries.
-    -   Accepts a ``Sender()`` class that implements the sender interface.
+    -   Accepts any class that implements the ``SenderProtocol`` interface.
             -   The sender interface is defined in
-                ``common/sender_requests.py``
+                ``common/sender_protocol.py``
     -   Accepts a ``ResponseHandler()`` class that implements the response
         handler interface.
             -   The response handler interface is defined in
-                ``module_utils/common/response_handler.py``
+                ``common/response_handler.py``
 
     ### Raises
     -   ``ValueError`` if:
@@ -59,14 +59,15 @@ class RestSend:
             -   ``result`` is not a ``dict``
             -   ``result_current`` is not a ``dict``
             -   ``send_interval`` is not an ``int``
-            -   ``sender`` is not an instance of ``Sender()``
+            -   ``sender`` does not implement ``SenderProtocol``
             -   ``timeout`` is not an ``int``
             -   ``unit_test`` is not a ``bool``
 
     ### Usage discussion
-    -   A Sender() class is used in the usage example below
-        -   See ``common/sender_requests.py`` for details about
-            implementing ``Sender()`` classes.
+    -   Any class implementing ``SenderProtocol`` can be used
+        -   See ``common/sender_protocol.py`` for the interface definition
+        -   See ``common/sender_requests.py`` for a requests-based implementation
+        -   See ``common/sender_file.py`` for a file-based implementation
     -   A ResponseHandler() class is used in the usage example below that
         abstracts controller response handling.  It accepts a controller
         response dict and returns a result dict.
@@ -75,8 +76,10 @@ class RestSend:
 
     ### Usage example
     ```python
+    from nd_python.common.sender_requests import Sender
+
     params = {}  # future parameters may be added here
-    sender = Sender() # class that implements the sender interface
+    sender = Sender() # class implementing SenderProtocol
 
     try:
         rest_send = RestSend(params)
@@ -127,7 +130,7 @@ class RestSend:
         self._result: list = []
         self._result_current: dict = {}
         self._send_interval = 5
-        self._sender: Sender = Sender()
+        self._sender: SenderProtocol | None = None
         self._timeout = 300
         self._unit_test = False
         self._verb: str = ""
@@ -700,35 +703,30 @@ class RestSend:
         self._send_interval = value
 
     @property
-    def sender(self) -> Sender:
+    def sender(self) -> SenderProtocol:
         """
-        A class implementing functionality to send requests to the controller.
-
-        The class must implement the following:
-
-        1. Class().class_name: str: property
-            -   Returns the name of the class
-            -   The class name must be "Sender"
-        2. Class().verb: str: property setter
-            -   Set the HTTP verb to use in the request.
-            -   One of {"GET", "POST", "PUT", "DELETE"}
-        3. Class().path: str: property setter
-            -   Set the path to the controller endpoint.
-        4. Class().payload: dict: property
-            -   Set the payload to send to the controller.
-            -   Must be Optional
-        5. Class().commit(): method
-            -   Initiate the request to the controller.
-        6. Class().response: dict: property
-            -   Return the response from the controller.
+        ### Summary
+        A class implementing the SenderProtocol interface to send requests
+        to the controller.
 
         ### Raises
-        -   ``TypeError`` if value is not an instance of ``Sender``
+        -   ``TypeError`` if value does not implement ``SenderProtocol``
+
+        ### Notes
+        The protocol requires the following:
+        1. implements: str property (must equal "sender_v1")
+        2. verb: str property with setter (GET, POST, PUT, DELETE)
+        3. path: str property with setter (endpoint path)
+        4. payload: dict | None property with setter (request payload)
+        5. response: dict property (controller response)
+        6. commit(): method (send the request)
+
+        See ``common/sender_protocol.py`` for the full interface definition.
         """
         return self._sender
 
     @sender.setter
-    def sender(self, value: Sender) -> None:
+    def sender(self, value: SenderProtocol) -> None:
         method_name = inspect.stack()[0][3]
         _implements_have = None
         _implements_need = "sender_v1"
