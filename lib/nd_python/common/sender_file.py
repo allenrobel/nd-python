@@ -105,7 +105,7 @@ class Sender:
 
         if self.raise_method == method_name:
             msg = f"{self.class_name}.{method_name}: "
-            msg += f"Simulated {self.raise_exception.__name__}."
+            msg += f"Simulated {self.raise_exception.__name__}."  # pylint: disable=no-member
             raise self.raise_exception(msg)  # pylint: disable=not-callable
 
         try:
@@ -265,7 +265,7 @@ class Sender:
         -   setter: Set ``response``
         """
         self._verify_commit_parameters()
-        return self.gen.next
+        return self.gen.next  # pylint: disable=no-member
 
     @property
     def verb(self):
