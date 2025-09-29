@@ -21,6 +21,8 @@ __author__ = "Allen Robel"
 import inspect
 import logging
 
+from nd_python.common.response_generator_protocol import ResponseGeneratorProtocol
+
 
 class Sender:
     """
@@ -63,7 +65,7 @@ class Sender:
         self.log = logging.getLogger(f"nd_python.{self.class_name}")
 
         self._ansible_module = None
-        self._gen = None
+        self._gen: ResponseGeneratorProtocol | None = None
         self._implements = "sender_v1"
         self._path = None
         self._payload = None
@@ -135,7 +137,7 @@ class Sender:
         self._ansible_module = value
 
     @property
-    def gen(self):
+    def gen(self) -> ResponseGeneratorProtocol:
         """
         ### Summary
         -   getter: Return the ``ResponseGenerator()`` instance.
@@ -144,12 +146,15 @@ class Sender:
 
         ### Raises
         ``TypeError`` if value is not a class implementing the
-        response_generator interface.
+        ResponseGeneratorProtocol interface.
+
+        ### Notes
+        See ``common/response_generator_protocol.py`` for the interface definition.
         """
         return self._gen
 
     @gen.setter
-    def gen(self, value):
+    def gen(self, value: ResponseGeneratorProtocol) -> None:
         method_name = inspect.stack()[0][3]
         msg = f"{self.class_name}.{method_name}: "
         msg += "Expected a class implementing the "
@@ -265,7 +270,7 @@ class Sender:
         -   setter: Set ``response``
         """
         self._verify_commit_parameters()
-        return self.gen.next  # pylint: disable=no-member
+        return self.gen.next
 
     @property
     def verb(self):
