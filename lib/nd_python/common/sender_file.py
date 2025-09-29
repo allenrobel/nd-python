@@ -264,6 +264,7 @@ class Sender:
         -   getter: Return a copy of ``response``
         -   setter: Set ``response``
         """
+        self._verify_commit_parameters()
         return self.gen.next
 
     @property
