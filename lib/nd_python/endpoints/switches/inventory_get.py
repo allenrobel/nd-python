@@ -1,4 +1,4 @@
-from nd_python.endpoints.base.endpoint import switches
+from nd_python.endpoints.base.endpoint import SWITCHES
 
 
 class EpSwitchesInventoryGet:
@@ -6,7 +6,7 @@ class EpSwitchesInventoryGet:
 
     def __init__(self) -> None:
         self.verb = "GET"
-        self.path = switches
+        self.path = SWITCHES
         self.description = "Get Switches Inventory"
         self._fabric_name = ""
 
@@ -14,7 +14,7 @@ class EpSwitchesInventoryGet:
         """Commit the endpoint path fabricName query parameter"""
         if not self._fabric_name:
             raise ValueError("fabric_name must be set before committing the endpoint")
-        self.path = f"{switches}?fabricName={self._fabric_name}"
+        self.path = f"{SWITCHES}?fabricName={self._fabric_name}"
 
     @property
     def fabric_name(self) -> str:
