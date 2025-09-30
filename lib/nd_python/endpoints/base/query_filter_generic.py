@@ -11,7 +11,6 @@ class QueryFilterGeneric:
     ## Attributes
 
     - filter: Lucene style filter string.  E.g. "prop1:value1 AND prop2:value2"
-    - limit: Limit the number of results to return.
     - max: Maximum number of results to return.
     - offset: Number of records to offset into the result set.
     - sort: Comma separated list of properties to sort by.  Prefix with '-' for descending order. E.g. "prop1,-prop2"
@@ -40,7 +39,7 @@ class QueryFilterGeneric:
 
     instance = MyClass()
     instance.filter.filter = "prop1:value1 AND prop2:value2"
-    instance.filter.limit = 10
+    instance.filter.max = 10
     instance.filter.offset = 5
     instance.filter.sort = "prop1,-prop2"
     instance.commit()
@@ -51,7 +50,6 @@ class QueryFilterGeneric:
         self.class_name = self.__class__.__name__
         self._committed: bool = False
         self._filter: str = ""
-        self._limit: int = 0
         self._max: int = 0
         self._offset: int = 0
         self._query_string: str = ""
@@ -62,8 +60,6 @@ class QueryFilterGeneric:
         params = {}
         if self._filter:
             params["filter"] = self._filter
-        if self._limit:
-            params["limit"] = self._limit
         if self._max:
             params["max"] = self._max
         if self._offset:
@@ -85,17 +81,6 @@ class QueryFilterGeneric:
     @filter.setter
     def filter(self, value: str) -> None:
         self._filter = value
-
-    @property
-    def limit(self) -> int:
-        """
-        Limit the number of results to return.
-        """
-        return self._limit
-
-    @limit.setter
-    def limit(self, value: int) -> None:
-        self._limit = value
 
     @property
     def max(self) -> int:
