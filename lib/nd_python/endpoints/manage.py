@@ -1,4 +1,4 @@
-from nd_python.endpoints.base.endpoint import credentials
+from nd_python.endpoints.base.endpoint import CREDENTIALS
 from nd_python.validators.endpoints.manage import EpCredentialsDefaultSwitchSaveValidator, EpCredentialsRobotSwitchSaveValidator
 from pydantic import ValidationError
 
@@ -8,7 +8,7 @@ class EpCredentialsDefaultSwitchDelete:
 
     def __init__(self) -> None:
         self.verb = "DELETE"
-        self.path = f"{credentials}/defaultSwitchCredentials"
+        self.path = f"{CREDENTIALS}/defaultSwitchCredentials"
         self.description = "Delete Default Switch Credentials"
 
 
@@ -17,7 +17,7 @@ class EpCredentialsDetailsGet:
 
     def __init__(self) -> None:
         self.verb = "GET"
-        self.path = f"{credentials}/details"
+        self.path = f"{CREDENTIALS}/details"
         self.description = "Get Credentials Details"
 
 
@@ -26,7 +26,7 @@ class EpCredentialsDefaultSwitchGet:
 
     def __init__(self) -> None:
         self.verb = "GET"
-        self.path = f"{credentials}/defaultSwitchCredentials"
+        self.path = f"{CREDENTIALS}/defaultSwitchCredentials"
         self.description = "Get Default Switch Credentials"
 
 
@@ -52,7 +52,7 @@ class EpCredentialsDefaultSwitchSave:
         self.validator = EpCredentialsDefaultSwitchSaveValidator
         self._body: dict = {}
         self.verb = "POST"
-        self.path = f"{credentials}/defaultSwitchCredentials"
+        self.path = f"{CREDENTIALS}/defaultSwitchCredentials"
         self.description = "Save Default Switch Credentials"
 
     def commit(self) -> None:
@@ -94,7 +94,7 @@ class EpCredentialsRobotSwitchDelete:
 
     def __init__(self) -> None:
         self.verb = "DELETE"
-        self.path = f"{credentials}/robotSwitchCredentials"
+        self.path = f"{CREDENTIALS}/robotSwitchCredentials"
         self.description = "Delete Robot Switch Credentials"
 
 
@@ -103,7 +103,7 @@ class EpCredentialsRobotSwitchGet:
 
     def __init__(self) -> None:
         self.verb = "GET"
-        self.path = f"{credentials}/robotSwitchCredentials"
+        self.path = f"{CREDENTIALS}/robotSwitchCredentials"
         self.description = "Get Robot Switch Credentials"
 
 
@@ -129,7 +129,7 @@ class EpCredentialsRobotSwitchSave:
         self.validator = EpCredentialsRobotSwitchSaveValidator
         self._body: dict = {}
         self.verb = "POST"
-        self.path = f"{credentials}/robotSwitchCredentials"
+        self.path = f"{CREDENTIALS}/robotSwitchCredentials"
         self.description = "Save Robot Switch Credentials"
 
     def commit(self) -> None:
@@ -172,7 +172,7 @@ class EpCredentialsUserSwitchGet:
 
     def __init__(self) -> None:
         self.verb = "GET"
-        self.path = f"{credentials}/switches"
+        self.path = f"{CREDENTIALS}/switches"
         self.description = "Get User Switch Credentials"
 
 
@@ -181,7 +181,7 @@ class EpCredentialsUserSwitchSave:
 
     def __init__(self) -> None:
         self.verb = "POST"
-        self.path = f"{credentials}/switches"
+        self.path = f"{CREDENTIALS}/switches"
         self.description = "Save User Switch Credentials"
 
 
@@ -190,5 +190,5 @@ class EpCredentialsUserSwitchDelete:
 
     def __init__(self) -> None:
         self.verb = "POST"
-        self.path = f"{credentials}/switches/actions/remove"
+        self.path = f"{CREDENTIALS}/switches/actions/remove"
         self.description = "Delete User Switch Credentials"
