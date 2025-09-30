@@ -1,4 +1,5 @@
 import inspect
+from urllib.parse import urlencode
 
 
 class QueryFilterGeneric:
@@ -7,7 +8,7 @@ class QueryFilterGeneric:
 
     Generic query filter parameters
 
-    ## Attribues
+    ## Attributes
 
     - filter: Lucene style filter string.  E.g. "prop1:value1 AND prop2:value2"
     - limit: Limit the number of results to return.
@@ -48,7 +49,7 @@ class QueryFilterGeneric:
 
     def __init__(self) -> None:
         self.class_name = self.__class__.__name__
-        self._commited: bool = False
+        self._committed: bool = False
         self._filter: str = ""
         self._limit: int = 0
         self._max: int = 0
@@ -58,19 +59,19 @@ class QueryFilterGeneric:
 
     def commit(self) -> None:
         """Commit the query filter parameters"""
+        params = {}
         if self._filter:
-            self._query_string += f"filter={self._filter}&"
+            params["filter"] = self._filter
         if self._limit:
-            self._query_string += f"limit={self._limit}&"
+            params["limit"] = self._limit
         if self._max:
-            self._query_string += f"max={self._max}&"
+            params["max"] = self._max
         if self._offset:
-            self._query_string += f"offset={self._offset}&"
+            params["offset"] = self._offset
         if self._sort:
-            self._query_string += f"sort={self._sort}&"
-        if self._query_string.endswith("&"):
-            self._query_string = self._query_string[:-1]
-        self._commited = True
+            params["sort"] = self._sort
+        self._query_string = urlencode(params)
+        self._committed = True
 
     @property
     def filter(self) -> str:
@@ -134,7 +135,7 @@ class QueryFilterGeneric:
     def query_string(self) -> str:
         """Return the query string"""
         method_name = inspect.stack()[0][3]
-        if not self._commited:
+        if not self._committed:
             msg = f"{self.class_name}.{method_name}: "
             msg += f"{self.class_name}.commit() must be called before accessing query_string"
             raise ValueError(msg)
