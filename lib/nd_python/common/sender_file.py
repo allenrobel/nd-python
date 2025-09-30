@@ -287,7 +287,7 @@ class Sender:
         -   setter: Set ``response``
         """
         self._verify_commit_parameters()
-        return self.gen.next
+        return self.gen.next  # pylint: disable=no-member
 
     @property
     def verb(self) -> str:
