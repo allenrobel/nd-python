@@ -18,8 +18,25 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 __author__ = "Allen Robel"
 
+import enum
 import inspect
 import logging
+
+from nd_python.common.response_generator_protocol import ResponseGeneratorProtocol
+
+
+@enum.unique
+class Exceptions(enum.Enum):
+    """Supported exceptions for simulation."""
+
+    VALUE_ERROR = ValueError
+    TYPE_ERROR = TypeError
+    KEY_ERROR = KeyError
+    INDEX_ERROR = IndexError
+    ATTRIBUTE_ERROR = AttributeError
+    NOT_IMPLEMENTED_ERROR = NotImplementedError
+    RUNTIME_ERROR = RuntimeError
+    EXCEPTION = Exception
 
 
 class Sender:
@@ -57,26 +74,27 @@ class Sender:
     ```
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.class_name = self.__class__.__name__
 
         self.log = logging.getLogger(f"nd_python.{self.class_name}")
 
         self._ansible_module = None
-        self._gen = None
+        self._gen: ResponseGeneratorProtocol | None = None
         self._implements = "sender_v1"
-        self._path = None
+        self._path: str = ""
         self._payload = None
         self._response = None
-        self._verb = None
+        self._verb: str = ""
 
-        self._raise_method = None
-        self._raise_exception = None
+        self._raise_method: str = "unknown"
+        self._raise_message: str = "Simulated exception for testing"
+        self._raise_exception: Exceptions | None = None
 
         msg = "ENTERED Sender(): "
         self.log.debug(msg)
 
-    def _verify_commit_parameters(self):
+    def _verify_commit_parameters(self) -> None:
         """
         ### Summary
         Verify that required parameters are set prior to calling ``commit()``
@@ -91,7 +109,15 @@ class Sender:
             msg += "gen must be set before calling commit()."
             raise ValueError(msg)
 
-    def commit(self):
+    def _check_and_raise(self, method_name: str) -> None:
+        """
+        Check if this method should raise an exception.
+        Call this at the start of each method that supports simulation.
+        """
+        if self._raise_method == method_name and self._raise_exception is not None:
+            raise self._raise_exception.value(self._raise_message)
+
+    def commit(self) -> None:
         """
         ### Summary
         Dummy commit
@@ -102,11 +128,7 @@ class Sender:
             ``self.raise_method`` == "commit"
         """
         method_name = inspect.stack()[0][3]
-
-        if self.raise_method == method_name:
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"Simulated {self.raise_exception.__name__}."  # pylint: disable=no-member
-            raise self.raise_exception(msg)  # pylint: disable=not-callable
+        self._check_and_raise(method_name)
 
         try:
             self._verify_commit_parameters()
@@ -123,7 +145,7 @@ class Sender:
         self.log.debug(msg)
 
     @property
-    def ansible_module(self):
+    def ansible_module(self) -> None:
         """
         ### Summary
         Dummy ansible_module
@@ -131,11 +153,11 @@ class Sender:
         return self._ansible_module
 
     @ansible_module.setter
-    def ansible_module(self, value):
+    def ansible_module(self, value) -> None:
         self._ansible_module = value
 
     @property
-    def gen(self):
+    def gen(self) -> ResponseGeneratorProtocol:
         """
         ### Summary
         -   getter: Return the ``ResponseGenerator()`` instance.
@@ -144,12 +166,15 @@ class Sender:
 
         ### Raises
         ``TypeError`` if value is not a class implementing the
-        response_generator interface.
+        ResponseGeneratorProtocol interface.
+
+        ### Notes
+        See ``common/response_generator_protocol.py`` for the interface definition.
         """
         return self._gen
 
     @gen.setter
-    def gen(self, value):
+    def gen(self, value: ResponseGeneratorProtocol) -> None:
         method_name = inspect.stack()[0][3]
         msg = f"{self.class_name}.{method_name}: "
         msg += "Expected a class implementing the "
@@ -164,7 +189,7 @@ class Sender:
         self._gen = value
 
     @property
-    def implements(self):
+    def implements(self) -> str:
         """
         ### Summary
         The interface implemented by this class.
@@ -175,7 +200,7 @@ class Sender:
         return self._implements
 
     @property
-    def path(self):
+    def path(self) -> str:
         """
         ### Summary
         Dummy path.
@@ -189,11 +214,11 @@ class Sender:
         return self._path
 
     @path.setter
-    def path(self, value):
+    def path(self, value: str) -> None:
         self._path = value
 
     @property
-    def payload(self):
+    def payload(self) -> dict | None:
         """
         ### Summary
         Dummy payload.
@@ -204,24 +229,21 @@ class Sender:
         return self._payload
 
     @payload.setter
-    def payload(self, value):
+    def payload(self, value: dict | None) -> None:
         self._payload = value
 
     @property
-    def raise_exception(self):
+    def raise_exception(self) -> Exceptions | None:
         """
         ### Summary
-        The exception to raise.
-
-        ### Raises
-        -   ``TypeError`` if value is not a subclass of
-            ``BaseException``.
+        The simulated exception to raise.
 
         ### Usage
         ```python
         instance = Sender()
+        sender.raise_exception = Exceptions.VALUE_ERROR
+        sender.raise_message = "Invalid commit data"
         instance.raise_method = "commit"
-        instance.raise_exception = ValueError
         instance.commit() # will raise a simulated ValueError
         ```
 
@@ -231,29 +253,29 @@ class Sender:
         return self._raise_exception
 
     @raise_exception.setter
-    def raise_exception(self, value):
+    def raise_exception(self, value: Exceptions) -> None:
         self._raise_exception = value
 
     @property
-    def raise_method(self):
-        """
-        ### Summary
-        The method in which to raise ``raise_exception``.
+    def raise_message(self) -> str:
+        """Custom message for the raised exception. See ``raise_exception``."""
+        return self._raise_message
 
-        ### Raises
-        None
+    @raise_message.setter
+    def raise_message(self, value: str) -> None:
+        self._raise_message = value
 
-        ### Usage
-        See ``raise_exception``.
-        """
+    @property
+    def raise_method(self) -> str | None:
+        """The method name where exception should be raised. See ``raise_exception``."""
         return self._raise_method
 
     @raise_method.setter
-    def raise_method(self, value):
+    def raise_method(self, value: str) -> None:
         self._raise_method = value
 
     @property
-    def response(self):
+    def response(self) -> dict:
         """
         ### Summary
         The simulated response from a file.
@@ -268,7 +290,7 @@ class Sender:
         return self.gen.next  # pylint: disable=no-member
 
     @property
-    def verb(self):
+    def verb(self) -> str:
         """
         ### Summary
         Dummy Verb.
@@ -279,5 +301,5 @@ class Sender:
         return self._verb
 
     @verb.setter
-    def verb(self, value):
+    def verb(self, value: str) -> None:
         self._verb = value
