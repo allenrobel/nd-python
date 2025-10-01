@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class EpCredentialsDefaultSwitchSaveValidator(BaseModel):
@@ -7,14 +7,12 @@ class EpCredentialsDefaultSwitchSaveValidator(BaseModel):
     switch_username: str = Field(..., alias="switchUsername", description="Switch Username")
     switch_password: str = Field(..., alias="switchPassword", description="Switch Password")
 
-    class Config:
-        """Pydantic configuration."""
-
-        validate_by_name = True
-        populate_by_alias = True
-        str_strip_whitespace = True
-        str_min_length = 1
-        extra = "forbid"
+    model_config = ConfigDict()
+    model_config["validate_by_name"] = True
+    model_config["populate_by_name"] = True
+    model_config["str_strip_whitespace"] = True
+    model_config["str_min_length"] = 1
+    model_config["extra"] = "forbid"
 
 
 class EpCredentialsRobotSwitchSaveValidator(BaseModel):
@@ -23,11 +21,9 @@ class EpCredentialsRobotSwitchSaveValidator(BaseModel):
     switch_username: str = Field(..., alias="switchUsername", description="Switch Username")
     switch_password: str = Field(..., alias="switchPassword", description="Switch Password")
 
-    class Config:
-        """Pydantic configuration."""
-
-        validate_by_name = True
-        populate_by_alias = True
-        str_strip_whitespace = True
-        str_min_length = 1
-        extra = "forbid"
+    model_config = ConfigDict()
+    model_config["validate_by_name"] = True
+    model_config["populate_by_name"] = True
+    model_config["str_strip_whitespace"] = True
+    model_config["str_min_length"] = 1
+    model_config["extra"] = "forbid"
