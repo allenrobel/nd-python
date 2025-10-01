@@ -206,7 +206,7 @@ class EpFabricDetailGet:
     ep = EpFabricDetailGet()
     fabric_name = "my_fabric"
     ep.query_filter.filter = f"name:{fabric_name}"
-    ep.query_filter.limit = 10
+    ep.query_filter.max = 10
     ep.query_filter.offset = 0
     ep.query_filter.sort = "name"
     """
@@ -228,12 +228,3 @@ class EpFabricDetailGet:
             self.path = f"{self._base_path}?category={self._category}&{self.query_filter.query_string}"
         else:
             self.path = f"{self._base_path}?category={self._category}"
-
-    @property
-    def fabric_name(self) -> str:
-        """Set (setter) or return (getter) the fabric name filter"""
-        return self._fabric_name
-
-    @fabric_name.setter
-    def fabric_name(self, value: str) -> None:
-        self._fabric_name = value
