@@ -1,5 +1,6 @@
-from nd_python.endpoints.base.endpoint import CREDENTIALS
+from nd_python.endpoints.base.endpoint import CREDENTIALS, FABRICS
 from nd_python.validators.endpoints.manage import EpCredentialsDefaultSwitchSaveValidator, EpCredentialsRobotSwitchSaveValidator
+from nd_python.endpoints.base.query_filter_generic import QueryFilterGeneric
 from pydantic import ValidationError
 
 
@@ -192,3 +193,46 @@ class EpCredentialsUserSwitchDelete:
         self.verb = "POST"
         self.path = f"{CREDENTIALS}/switches/actions/remove"
         self.description = "Delete User Switch Credentials"
+
+
+class EpFabricDetailGet:
+    """
+    # Summary
+
+    Endpoint to get fabric details
+    
+    ## Usage
+    ```python
+    ep = EpFabricDetailGet()
+    fabric_name = "my_fabric"
+    ep.query_filter.filter = f"name:{fabric_name}"
+    ep.query_filter.limit = 10
+    ep.query_filter.offset = 0
+    ep.query_filter.sort = "name"
+    """
+
+    def __init__(self) -> None:
+        self.verb = "GET"
+
+        self._base_path = f"{FABRICS}"  # Store base path
+        self.path = self._base_path
+        self._category: str = "fabric"
+        self.query_filter = QueryFilterGeneric()
+
+        self.description = "Get Fabric Details"
+
+    def commit(self) -> None:
+        """Commit the query filter parameters"""
+        self.query_filter.commit()
+        if self.query_filter.query_string:
+            self.path = f"{self._base_path}?category={self._category}&{self.query_filter.query_string}"
+        else:
+            self.path = f"{self._base_path}?category={self._category}"
+
+    @property
+    def fabric_name(self) -> str:
+        """Set (setter) or return (getter) the fabric name filter"""
+        return self._fabric_name
+    @fabric_name.setter
+    def fabric_name(self, value: str) -> None:
+        self._fabric_name = value
