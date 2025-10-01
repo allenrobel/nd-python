@@ -1,9 +1,8 @@
 """Pydantic v2 model for ND fabric POST payload."""
 
 from datetime import datetime
-from typing import List, Optional
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 class Location(BaseModel):
@@ -24,56 +23,56 @@ class FlowRuleAttributes(BaseModel):
     """Flow rule attributes for telemetry collection."""
 
     bidirectional: bool = False
-    dst_ip: Optional[str] = Field(None, alias="dstIp")
-    dst_port: Optional[str] = Field(None, alias="dstPort")
-    protocol: Optional[str] = None
-    src_ip: Optional[str] = Field(None, alias="srcIp")
-    src_port: Optional[str] = Field(None, alias="srcPort")
+    dst_ip: str | None = Field(None, alias="dstIp")
+    dst_port: str | None = Field(None, alias="dstPort")
+    protocol: str | None = None
+    src_ip: str | None = Field(None, alias="srcIp")
+    src_port: str | None = Field(None, alias="srcPort")
 
 
 class InterfaceCollection(BaseModel):
     """Interface collection configuration."""
 
-    interfaces: List[str]
-    switch_name: Optional[str] = Field(None, alias="switchName")
+    interfaces: list[str]
+    switch_name: str = Field(None, alias="switchName")
 
 
 class L3OutInterfaceCollection(BaseModel):
     """L3Out interface collection configuration."""
 
-    encap: Optional[str] = None
-    interfaces: List[str]
-    l3_out: Optional[str] = Field(None, alias="l3Out")
-    switch_id: Optional[str] = Field(None, alias="switchId")
-    switch_name: Optional[str] = Field(None, alias="switchName")
-    tenant: Optional[str] = None
+    encap: str | None = None
+    interfaces: list[str]
+    l3_out: str | None = Field(None, alias="l3Out")
+    switch_id: str | None = Field(None, alias="switchId")
+    switch_name: str | None = Field(None, alias="switchName")
+    tenant: str | None = None
 
 
 class InterfaceFlowRule(BaseModel):
     """Interface flow rule configuration."""
 
-    attributes: List[FlowRuleAttributes]
-    interface_collection: List[InterfaceCollection] = Field(alias="interfaceCollection")
+    attributes: list[FlowRuleAttributes]
+    interface_collection: list[InterfaceCollection] = Field(alias="interfaceCollection")
     name: str
-    subnets: List[str]
+    subnets: list[str]
     type: str = "physical"
 
 
 class L3OutFlowRule(BaseModel):
     """L3Out flow rule configuration."""
 
-    interface_collection: List[L3OutInterfaceCollection] = Field(alias="interfaceCollection")
+    interface_collection: list[L3OutInterfaceCollection] = Field(alias="interfaceCollection")
     name: str
-    subnets: List[str]
+    subnets: list[str]
     type: str = "subInterface"
 
 
 class VrfFlowRule(BaseModel):
     """VRF flow rule configuration."""
 
-    attributes: List[FlowRuleAttributes]
+    attributes: list[FlowRuleAttributes]
     name: str
-    subnets: List[str]
+    subnets: list[str]
     tenant: str
     vrf: str
 
@@ -81,9 +80,9 @@ class VrfFlowRule(BaseModel):
 class FlowRules(BaseModel):
     """Flow rules configuration."""
 
-    interface_flow_rules: List[InterfaceFlowRule] = Field(alias="interfaceFlowRules")
-    l3_out_flow_rules: List[L3OutFlowRule] = Field(alias="l3OutFlowRules")
-    vrf_flow_rules: List[VrfFlowRule] = Field(alias="vrfFlowRules")
+    interface_flow_rules: list[InterfaceFlowRule] = Field(alias="interfaceFlowRules")
+    l3_out_flow_rules: list[L3OutFlowRule] = Field(alias="l3OutFlowRules")
+    vrf_flow_rules: list[VrfFlowRule] = Field(alias="vrfFlowRules")
 
 
 class FlowCollectionModes(BaseModel):
@@ -105,12 +104,12 @@ class FlowCollection(BaseModel):
 class CollectionSettings(BaseModel):
     """Collection settings for telemetry."""
 
-    advisories: Optional[List[str]] = None
-    anomalies: Optional[List[str]] = None
-    audit_logs: Optional[List[str]] = Field(None, alias="auditLogs")
-    faults: Optional[List[str]] = None
-    risk_and_conformance_reports: Optional[List[str]] = Field(None, alias="riskAndConformanceReports")
-    statistics: Optional[List[str]] = None
+    advisories: list[str] | None = None
+    anomalies: list[str] | None = None
+    audit_logs: list[str] | None = Field(None, alias="auditLogs")
+    faults: list[str] | None = None
+    risk_and_conformance_reports: list[str] | None = Field(None, alias="riskAndConformanceReports")
+    statistics: list[str] | None = None
 
 
 class EmailSettings(BaseModel):
@@ -163,7 +162,7 @@ class SustainabilitySettings(BaseModel):
 class SyslogCollectionSettings(BaseModel):
     """Syslog collection settings."""
 
-    anomalies: List[str]
+    anomalies: list[str]
 
 
 class SyslogSettings(BaseModel):
@@ -171,7 +170,7 @@ class SyslogSettings(BaseModel):
 
     collection_settings: SyslogCollectionSettings = Field(alias="collectionSettings")
     facility: str
-    servers: List[str]
+    servers: list[str]
 
 
 class AnalysisSettings(BaseModel):
@@ -184,9 +183,9 @@ class TelemetrySettings(BaseModel):
     """Telemetry settings configuration."""
 
     analysis_settings: AnalysisSettings = Field(alias="analysisSettings")
-    email: List[EmailSettings]
+    email: list[EmailSettings]
     flow_collection: FlowCollection = Field(alias="flowCollection")
-    message_bus: List[MessageBusSettings] = Field(alias="messageBus")
+    message_bus: list[MessageBusSettings] = Field(alias="messageBus")
     microburst: MicroburstSettings
     nas: NasSettings
     sustainability: SustainabilitySettings
@@ -392,7 +391,7 @@ class Management(BaseModel):
 class Meta(BaseModel):
     """ND Fabric metadata."""
 
-    allowed_actions: List[str] = Field(alias="allowedActions")
+    allowed_actions: list[str] = Field(alias="allowedActions")
 
 
 class FabricPostConfig(BaseModel):
@@ -411,11 +410,9 @@ class FabricPostConfig(BaseModel):
     telemetry_source_vrf: str = Field("string", alias="telemetrySourceVrf")
     telemetry_streaming_protocol: str = Field("ipv4", alias="telemetryStreamingProtocol")
 
-    class Config:
-        """Pydantic configuration."""
-
-        populate_by_name = True
-        use_enum_values = True
+    model_config = ConfigDict()
+    model_config["validate_by_name"] = True
+    model_config["use_enum_values"] = True
 
 
 config = list[FabricPostConfig]
