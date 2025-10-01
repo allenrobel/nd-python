@@ -1,5 +1,7 @@
 from nd_python.endpoints.manage import EpFabricDetailGet
 
+# pylint: disable=protected-access
+
 
 class TestEpFabricDetailGet:
     """Test cases for EpFabricDetailGet endpoint class"""

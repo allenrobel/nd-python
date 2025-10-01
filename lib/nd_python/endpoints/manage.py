@@ -1,6 +1,6 @@
 from nd_python.endpoints.base.endpoint import CREDENTIALS, FABRICS
-from nd_python.validators.endpoints.manage import EpCredentialsDefaultSwitchSaveValidator, EpCredentialsRobotSwitchSaveValidator
 from nd_python.endpoints.base.query_filter_generic import QueryFilterGeneric
+from nd_python.validators.endpoints.manage import EpCredentialsDefaultSwitchSaveValidator, EpCredentialsRobotSwitchSaveValidator
 from pydantic import ValidationError
 
 
@@ -200,7 +200,7 @@ class EpFabricDetailGet:
     # Summary
 
     Endpoint to get fabric details
-    
+
     ## Usage
     ```python
     ep = EpFabricDetailGet()
@@ -233,6 +233,7 @@ class EpFabricDetailGet:
     def fabric_name(self) -> str:
         """Set (setter) or return (getter) the fabric name filter"""
         return self._fabric_name
+
     @fabric_name.setter
     def fabric_name(self, value: str) -> None:
         self._fabric_name = value
