@@ -34,7 +34,7 @@ class InterfaceCollection(BaseModel):
     """Interface collection configuration."""
 
     interfaces: list[str]
-    switch_name: str = Field(None, alias="switchName")
+    switch_name: str | None = Field(None, alias="switchName")
 
 
 class L3OutInterfaceCollection(BaseModel):
