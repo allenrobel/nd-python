@@ -49,22 +49,22 @@ class QueryFilterGeneric:
     def __init__(self) -> None:
         self.class_name = self.__class__.__name__
         self._committed: bool = False
-        self._filter: str = ""
-        self._max: int = 0
-        self._offset: int = 0
-        self._query_string: str = ""
-        self._sort: str = ""
+        self._filter: str = None
+        self._max: int = None
+        self._offset: int = None
+        self._query_string: str = None
+        self._sort: str = None
 
     def commit(self) -> None:
         """Commit the query filter parameters"""
         params = {}
-        if self._filter:
+        if self._filter is not None:
             params["filter"] = self._filter
-        if self._max:
+        if self._max is not None:
             params["max"] = self._max
-        if self._offset:
+        if self._offset is not None:
             params["offset"] = self._offset
-        if self._sort:
+        if self._sort is not None:
             params["sort"] = self._sort
         self._query_string = urlencode(params)
         self._committed = True
