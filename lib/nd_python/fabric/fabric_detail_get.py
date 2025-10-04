@@ -19,8 +19,8 @@ import inspect
 import logging
 
 from nd_python.common.properties import Properties
-from nd_python.endpoints.manage import EpFabricDetailGet
 from nd_python.endpoints.base.query_filter_generic import QueryFilterGeneric
+from nd_python.endpoints.manage import EpFabricDetailGet
 
 
 class FabricDetailGet:
