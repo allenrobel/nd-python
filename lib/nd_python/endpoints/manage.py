@@ -199,16 +199,19 @@ class EpFabricDetailGet:
     """
     # Summary
 
-    Endpoint to get fabric details
+    Construct endpoint to retrieve fabric detail for one or more fabrics from the controller.
 
     ## Usage
     ```python
     ep = EpFabricDetailGet()
-    fabric_name = "my_fabric"
-    ep.query_filter.filter = f"name:{fabric_name}"
+    # Optionally set query filter parameters
+    ep.query_filter.filter = f"name:MyFabric"
     ep.query_filter.max = 10
     ep.query_filter.offset = 0
     ep.query_filter.sort = "name"
+    ep.commit()
+    response = client.request(ep.verb, ep.path)
+    ```
     """
 
     def __init__(self) -> None:
