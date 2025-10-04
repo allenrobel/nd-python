@@ -59,7 +59,7 @@ class FabricDetailGet:
 
     def commit(self) -> None:
         """
-        Retrieve credentials details from the controller
+        Retrieve fabric details from the controller
         """
         method_name = inspect.stack()[0][3]
         self._final_verification()
