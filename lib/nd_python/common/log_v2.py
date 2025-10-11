@@ -290,8 +290,9 @@ class Log:
         log.commit()
         ```
         """
+        msg: str = ""
         if len(logging_config.get("handlers", {})) == 0:
-            msg: str = "logging.config.dictConfig: "
+            msg = "logging.config.dictConfig: "
             msg += "No file handlers found. "
             msg += "Add a file handler to the logging config file "
             msg += f"and try again: {self.config}"
@@ -301,7 +302,7 @@ class Log:
             if handler not in self.valid_handlers:
                 bad_handlers.append(handler)
         if len(bad_handlers) > 0:
-            msg: str = f"Logging config file: {self.config}. "
+            msg = f"Logging config file: {self.config}. "
             msg += "logging.config.dictConfig: "
             msg += "handlers found that may interrupt Ansible module "
             msg += "execution. "
