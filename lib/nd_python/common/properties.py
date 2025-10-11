@@ -9,9 +9,9 @@ class Properties:
     Common properties used in the ndfc-python repository
     """
 
-    def __init__(self):
-        self._rest_send = None
-        self._results = None
+    def __init__(self) -> None:
+        self._rest_send: RestSend = RestSend({})
+        self._results: Results = Results()
 
     @property
     def rest_send(self) -> RestSend:
@@ -21,7 +21,7 @@ class Properties:
         return self._rest_send
 
     @rest_send.setter
-    def rest_send(self, value: RestSend):
+    def rest_send(self, value: RestSend) -> None:
         self._rest_send = value
 
     @property
@@ -32,5 +32,5 @@ class Properties:
         return self._results
 
     @results.setter
-    def results(self, value: Results):
+    def results(self, value: Results) -> None:
         self._results = value
